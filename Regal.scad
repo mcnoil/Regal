@@ -3,7 +3,8 @@ $spiel=0;  //wie sehr solls Wackeln
 
 
 
- regal(100,100,350*$t,4,0  ,4);
+
+
 
 //Das Modul regal Baut ein einfaches Regal nach festgelegbaren Außenmaßen her. Es stellt sowohl eine Ansicht des vertigen Regals zur verfügung als auch Schnittmuster für alle Bauteile. Als auch eine Anleitung zum zusammenbau.
 //Es sind 6 Modies zur auswahl:
