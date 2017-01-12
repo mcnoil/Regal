@@ -84,6 +84,7 @@ module regal(
  
   
     
+    // Im folgenden werden die einzelteile als 2d formen definiert diese sind im wesentlichen Rechtecke (sqare(vektor)) zu denen Zähne hinzukommen bezihungsweise von denen Löcher abgezogen werden um verbindungen mit benachbarten Brettern herzustellen.  xx_xxx(); stellt dabei jeweils die verbindung zwischen den entsprechenden Modulen da, wobei die eingabe true die Form aufruft, die hinzuzufügen ist und die Eingabe false die entsprechende gegen Form.
     
     module bord()
     {
@@ -141,7 +142,8 @@ module regal(
         translate([ 0,innenhoehe]) mirror([0,1]) deckel_seitenwand(true);
     }
     
-    // hier folgt eine Liste
+    // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. Sollten zu einem späteren Zeitpunkt weitere hinzu kommen, so kein ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
+    
     module seitenbrett_rueckwand(z = true)
     {
         verzahnung(innenhoehe, z);
@@ -167,6 +169,8 @@ module regal(
     } 
        
     
+    // Das folgende Code frakment wird eigendlich nicht mehr gebraucht, da sein ergebnis als spezialfall des Moduls animation() erzeugt werden kann. Zu anschauungszwecken lasse ich es aber ersteinmal da. Es diente das vertige objekt zu sehen. Dieses sollte immer eines der ersten Dinge sein, die man schreibt wenn. Man Schnittmuster für ein objekt macht.
+    
     /*
     module assemble()
     {
@@ -188,6 +192,7 @@ module regal(
                 linear_extrude($thickness) bord();
     }
     */
+    
     module teile()
     {
 
@@ -211,6 +216,7 @@ module regal(
             translate(v)
                 rotate(-90) deckel();
     }
+    
     module animation()
     {
         if ($t > 0.2)
