@@ -1,5 +1,5 @@
-$thickness=3; 
-$spiel=0;  //wie sehr solls Wackeln
+//$thickness=3; 
+//$spiel=0;  //wie sehr solls Wackeln
 
 
 
