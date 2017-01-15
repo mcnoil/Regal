@@ -14,10 +14,15 @@
 //animation gibt eine animierte Bauanleitung des Zusammenbaus aus. Denke daran, im menuepunkt view animate auszuwählen steps mindestens 10 und FPS etwa 1/10 der steps sind gute Einstellungen um für diese animation
 //regal hat 5 EingabeWerte der reihenfolge nach:
 // tiefe, breite, hoehe stellen jeweils die entsprechenden Außenmaße da.
+
+//Offene Diskussion: ist die Reihenfolg "tiefe, breite, hoehe" intuitiv? Die im Handwerk übliche reihenfolge "breit, hoehe, tiefe" ist offenkundig Kacke. Die Reheinfolge muss der Coordinatenreihenfolge der Achsen folgen "x,y,z" und die z-Achse bleibt zu kompatibilitätszwecken der hoehe zugeordnet. Wie herrum breite und tiefe der x, und y Achse zugeordnet werden kann diskutiert werden. Das Rational für die gewählte Reihenfolge ist, dass "Länge, Breite, Höhe" eine übliche Reihenfolge ist. hier steht die Breite an zweiter stelle, somit bleibt für die Tiefe nur noch der erste Platz. Sie ist sozusagten ein Synnonym für Länge
+
+
 // die Variable faecher ....
 // Der modus gibt den oben angegebenen Modus an
 // Der Rand gibt an, wie weit Deckel und Boden überstehen
-// Das Modul Regal  Greift auf das Modul verzahnung zurück und ist daher von den Modulenh verzahnung, stollen so wie zapfen abhängig. Die besonderen Variablen $thickness und $spiel beeinflussen es.
+// Das Modul Regal  Greift auf das Modul verzahnung zurück und ist daher von den Modulenh verzahnung, stollen so wie zapfen abhängig. 
+//Die besonderen Variablen $thickness und $spiel beeinflussen es. Man sehe also zu, dass diese gesetzt sind
 
 
 
@@ -88,7 +93,7 @@ module regal(
     
     module bord()
     {
-            square([innentiefe, innenbreite]);
+            square([innentiefe, innenbreite]); //hauptteil
             mirror() bord_rueckwand(true);
                     bord_seitenwand(true);
            translate( [0, innenbreite]) mirror([0,1]) bord_seitenwand(true);
@@ -101,7 +106,7 @@ module regal(
     {
         difference()
         {
-            square([innenhoehe, innenbreite]);
+            square([innenhoehe, innenbreite]);  //hauptteil
             for (k = brettpositionen)
                 translate([k, 0]) bord_rueckwand(false);
         }
@@ -119,7 +124,7 @@ module regal(
     {
         difference()
         {
-            square([tiefe, breite]);
+            square([tiefe, breite]);	//hauptteil
             translate([rueckrand, $thickness+seitenrand]) deckel_rueckwand(false);
             for (k = [$thickness+seitenrand, breite-seitenrand])
                 translate([0, k, 0]) deckel_seitenwand(false);
@@ -132,7 +137,7 @@ module regal(
     {
         difference()
         {
-            square([tiefe, innenhoehe]);
+            square([tiefe, innenhoehe]);	//hauptteil
             for (v = brettpositionen)
                 translate([$thickness+rueckrand, v+$thickness]) 
                     bord_seitenwand(false);
@@ -142,7 +147,9 @@ module regal(
         translate([ 0,innenhoehe]) mirror([0,1]) deckel_seitenwand(true);
     }
     
-    // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. Sollten zu einem späteren Zeitpunkt weitere hinzu kommen, so kein ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
+    // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. 
+   //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
+  //Sollten z.B. zu einem späteren Zeitpunkt weitere Konektoren hinzu kommen, so kann ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
     
     module seitenbrett_rueckwand(z = true)
     {
@@ -193,6 +200,10 @@ module regal(
     }
     */
     
+
+// Das Modul teile() Puzzeled die 2d formen so zusammen, das sie als gemeinsames schnittmuster ausgegeben werden können.
+
+
     module teile()
     {
 
@@ -248,7 +259,8 @@ module regal(
 }
 
 
-
+// Das Modul verzahnugn() macht die form, für eine Reihe von Zähnen (true) beziehungsweise Löcher (false) für dies Zähne. Die laenge gibt an, über welche Strecke verzahnt werden soll, wobei darauf geachtet ist, dass dafor und dahinter genügend Platz bleibt. z gibt an, ob die form für den Zapfen oder für den Stollen gemacht werden soll. Und die zahnlaenge, wie  groß die Zähne werden.
+// Es benutzt die Module Zapfen (Zähne) und Stollen (Löcher). Ausserdem hängt es von den Besonderen Variablen $thickness und $spiel ab.
 
 module verzahnung(laenge, z = true,zahnlaenge=10)
 {
@@ -270,12 +282,14 @@ module verzahnung(laenge, z = true,zahnlaenge=10)
      }
 }
 
-
+//Das Modul stollen() macht die Form für ein einzelnes Loch passend zum dazugehörigen Zapfen.
 
 module stollen(zahnlaenge=10)
 {
     translate([-0.5*$spiel, 0]) square([$thickness+$spiel, zahnlaenge]);
 }
+
+//Das Modul zapfen() macht die Form für einen einzelnen Zahn, passend zum dazugehörigen Stollen.
 
 module zapfen(zahnlaenge=10)
 {
