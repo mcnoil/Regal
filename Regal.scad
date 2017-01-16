@@ -228,33 +228,34 @@ module regal(
                 rotate(-90) deckel();
     }
     
+    // Das Modul animation() erzeugt eine animierte Bauanleitung. Wobei animation($t=1) das vertige Modell zeigt.
+    
+    
     module animation()
     {
-        if ($t > 0.2)
-        {     
-            for (v = [[0, $thickness+seitenrand, $thickness], [0, breite-seitenrand, $thickness]])
-                translate(v)
-                    rotate([90,0,0])
-                        linear_extrude($thickness) seitenbrett();
-        }
-    
-        if ($t > 0.3)
+        aufbau()
         {
-            for (v = [[0, 0, 0], [0, 0, hoehe-$thickness]])
-                translate(v)
-                    linear_extrude($thickness) deckel();
-        }
-    
-        translate([$thickness+rueckrand, $thickness+seitenrand, $thickness])
-            rotate([0,-90,0])
-                linear_extrude($thickness) rueckwand();
-    
-        if ($t > 0.10)
-        {
-            for (k = brettpositionen)
-                translate([$thickness+rueckrand, $thickness+seitenrand, k+$thickness])
-                    linear_extrude($thickness) bord();
-        }
+                 translate([$thickness+rueckrand, $thickness+seitenrand, $thickness])
+                rotate([0,-90,0])
+                    linear_extrude($thickness) rueckwand();
+
+                for (k = brettpositionen)
+                    translate([$thickness+rueckrand, $thickness+seitenrand, k+$thickness])
+                        linear_extrude($thickness) bord();
+        
+                for (v = [[0, $thickness+seitenrand, $thickness], [0, breite-seitenrand, $thickness]])
+                    translate(v)
+                        rotate([90,0,0])
+                            linear_extrude($thickness) seitenbrett();
+            
+        
+
+                for (v = [[0, 0, 0], [0, 0, hoehe-$thickness]])
+                    translate(v)
+                        linear_extrude($thickness) deckel();
+            
+
+            } 
     }
 }
 
@@ -297,3 +298,13 @@ module zapfen(zahnlaenge=10)
     //gibt an, wie weit sich der Zapfen mit seinem ursrpung überschneidet hierdurch wird verhindert, dass kleine rechenfehler dazu führen, dass er abgeschnitten wird.
     translate([-wurzel, 0.5*$spiel]) square([$thickness+wurzel, zahnlaenge - $spiel]);
 }
+
+//Das Modul aufbau gibt eine Animationssystematik. Die mit ihm aufgerufenen Module erscheinen in der Reihenfolge des aufrufes.
+
+
+module aufbau()
+{
+    x=1/$children;
+    for(n=[0:$children-1])if($t>=x*n)children(n);
+}
+
