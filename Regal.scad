@@ -71,7 +71,7 @@ module regal(
     
     
     brettpositionen=aufteiler(); //die höhen der bretter gemessen am innenboden 
-    echo(brettpositionen);
+    echo("brettpositionen:"brettpositionen);
     brettanzahl=len(brettpositionen);
     
     // die folgende Funktion ermöglicht, dass für die Variable faecher sowohl eine Zahl (die anzahl der Fächer) als auch ein Vector(die positionen der Bretter) eingegeben werden können. Die DefaultWerte sind für diesen zweck eingestellt, in zukünftigen Designs könnte sie jedoch durchaus auch für andere ähnliche zwecke verwendet werden. Bekommt Sie einen Vektor (mit tatsächlichen einträgen) so gibt sie diesen wider aus. Bekommt sie eine Zahl und eine laenge, so gibt sie einen entsprechenden Vektor aus, der die Länge in eine entsprechende Anzahl von fächern unter einbeziehung der aktuellen $thickness aufteilt.
@@ -85,7 +85,7 @@ module regal(
          );
 
     // nun einige Fehlermeldungen, um schlechte übergabewerte für das Regal abzufangen
-    if(!(innenhoehe>0&&innenbreite>0&&innentiefe>0)) echo("schlechte eingabewerte in regal()");           
+    if(!(innenhoehe>0&&innenbreite>0&&innentiefe>0)) echo("<font color='red'>  schlechte eingabewerte in regal()</font>");           
  
   
     
@@ -267,8 +267,8 @@ module verzahnung(laenge, z = true,zahnlaenge=10)
 {
    
     positionen=[for (k = [zahnlaenge : 2*zahnlaenge : laenge-2*zahnlaenge])k];
-    if (!(len(positionen)>0)) echo("verzahnungsfehler");
-    if (len(positionen)==1) echo("reicht dir ein Zahn?");
+    if (!(len(positionen)>0)) echo("<font color='red'>verzahnungsfehler</font>");
+    if (len(positionen)==1) echo("<font color='red'>reicht dir ein Zahn?</font>");
 
     rest=laenge-(positionen[len(positionen)-1]+zahnlaenge);
     translate([0,(rest-zahnlaenge)/2])
