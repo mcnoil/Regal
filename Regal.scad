@@ -10,7 +10,7 @@
 //Es sind 6 Modies zur auswahl:
 //assemble gibt die ansicht des vertig zusammengebauten Regals aus.
 //teile gibt ein schnittmuster aus, das alle EinzelTeile des Regals enthällt.
-//rueckwand, deckel, bord und seitenbrett geben jeweils ein Schnittmuster des entsprechenden Teils aus, wobei daran zu denken ist, dass für das fertige Regal von deckel und Seitenwänden jeweils 2 und von bord eines weniger als man fächer hat benötigt werden
+//rueckwand, deckel, bord und seitenwand geben jeweils ein Schnittmuster des entsprechenden Teils aus, wobei daran zu denken ist, dass für das fertige Regal von deckel und Seitenwänden jeweils 2 und von bord eines weniger als man fächer hat benötigt werden
 //animation gibt eine animierte Bauanleitung des Zusammenbaus aus. Denke daran, im menuepunkt view animate auszuwählen steps mindestens 10 und FPS etwa 1/10 der steps sind gute Einstellungen um für diese animation
 //regal hat 5 EingabeWerte der reihenfolge nach:
 // tiefe, breite, hoehe stellen jeweils die entsprechenden Außenmaße da.
@@ -32,7 +32,7 @@ teile=1;
 rueckwand=2;
 deckel=3;
 bord=4;
-seitenbrett=5;
+seitenwand=5;
 animation=6;
 
 
@@ -51,7 +51,7 @@ module regal(
     if(modus==2) rueckwand();
     if(modus==3) deckel();
     if(modus==4) bord();
-    if(modus==5) seitenbrett();
+    if(modus==5) seitenwand();
     if(modus==6) animation();
 
    DELTA = 0.001; 
@@ -71,7 +71,7 @@ module regal(
     
     
     brettpositionen=aufteiler(); //die höhen der bretter gemessen am innenboden 
-    echo("brettpositionen:"brettpositionen);
+    echo(brettpositionen);
     brettanzahl=len(brettpositionen);
     
     // die folgende Funktion ermöglicht, dass für die Variable faecher sowohl eine Zahl (die anzahl der Fächer) als auch ein Vector(die positionen der Bretter) eingegeben werden können. Die DefaultWerte sind für diesen zweck eingestellt, in zukünftigen Designs könnte sie jedoch durchaus auch für andere ähnliche zwecke verwendet werden. Bekommt Sie einen Vektor (mit tatsächlichen einträgen) so gibt sie diesen wider aus. Bekommt sie eine Zahl und eine laenge, so gibt sie einen entsprechenden Vektor aus, der die Länge in eine entsprechende Anzahl von fächern unter einbeziehung der aktuellen $thickness aufteilt.
@@ -112,9 +112,9 @@ module regal(
         }
         mirror() deckel_rueckwand(true);
         translate( [innenhoehe, 0]) deckel_rueckwand(true);
-        rotate(-90) seitenbrett_rueckwand();
+        rotate(-90) seitenwand_rueckwand();
         translate([0, innenbreite])
-                rotate(-90) mirror() seitenbrett_rueckwand();
+                rotate(-90) mirror() seitenwand_rueckwand();
     }
     
     
@@ -133,7 +133,7 @@ module regal(
     
     
     
-    module seitenbrett()
+    module seitenwand()
     {
         difference()
         {
@@ -141,7 +141,7 @@ module regal(
             for (v = brettpositionen)
                 translate([$thickness+rueckrand, v+$thickness]) 
                     bord_seitenwand(false);
-            translate([rueckrand,0,0]) seitenbrett_rueckwand(false);
+            translate([rueckrand,0,0]) seitenwand_rueckwand(false);
         }
         deckel_seitenwand(true);
         translate([ 0,innenhoehe]) mirror([0,1]) deckel_seitenwand(true);
@@ -151,7 +151,7 @@ module regal(
    //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
   //Sollten z.B. zu einem späteren Zeitpunkt weitere Konektoren hinzu kommen, so kann ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
     
-    module seitenbrett_rueckwand(z = true)
+    module seitenbwand_rueckwand(z = true)
     {
         verzahnung(innenhoehe, z);
     }
@@ -216,7 +216,7 @@ module regal(
                     [$thickness, innenbreite+2*($thickness+tiefe+DELTA)]
                 ])
             translate(v) 
-                rotate(-90) seitenbrett();
+                rotate(-90) seitenwand();
         
         for (k = [1 : brettanzahl])
             translate([hoehe+k*(innentiefe+$thickness+DELTA)-innentiefe, $thickness])
@@ -246,7 +246,7 @@ module regal(
                 for (v = [[0, $thickness+seitenrand, $thickness], [0, breite-seitenrand, $thickness]])
                     translate(v)
                         rotate([90,0,0])
-                            linear_extrude($thickness) seitenbrett();
+                            linear_extrude($thickness) seitenwand();
             
         
 
@@ -275,10 +275,11 @@ module verzahnung(laenge, z = true,zahnlaenge=10)
     {
         for (k = positionen)
         {
-               translate([0,k]) { 
+               translate([0,k]) 
+		{ 
                 if (z) zapfen(zahnlaenge);
                 else stollen (zahnlaenge);
-                           }
+                }
          }
      }
 }
