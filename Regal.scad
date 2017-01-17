@@ -151,7 +151,7 @@ module regal(
    //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
   //Sollten z.B. zu einem späteren Zeitpunkt weitere Konektoren hinzu kommen, so kann ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
     
-    module seitenbwand_rueckwand(z = true)
+    module seitenwand_rueckwand(z = true)
     {
         verzahnung(innenhoehe, z);
     }
