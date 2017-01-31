@@ -42,7 +42,8 @@ module regal(
             hoehe=350,
             faecher=5,
             modus=0,
-            rand=5
+            rand=5,
+             $thickness=3
             )
 {
     //hier wird der Modus ausgeführt. die entsprechenden Module stehen weiter unten.
@@ -57,7 +58,7 @@ module regal(
    DELTA = 0.001; 
         //DELTA Produziert einen minimalen Abstand zwischen dein Teilen, damit hier überhaupt ein Schnitt stattfindet dieses findet im Modul teile() statt.
     
- 
+
    
    //zwar sind in diesem Design der Rand an der Rückseite und an den seiten links und rechts als gleichgroß gesetzt. Ein zukünftiges anderes design könnte hier aber durchaus einen anderen Weg gehen.
     
@@ -85,7 +86,14 @@ module regal(
          );
 
     // nun einige Fehlermeldungen, um schlechte übergabewerte für das Regal abzufangen
-    if(!(innenhoehe>0&&innenbreite>0&&innentiefe>0)) echo("<font color='red'>  schlechte eingabewerte in regal()</font>");           
+    if(!(innenhoehe>0&&innenbreite>0&&innentiefe>0)) echo("<font color='red'>  schlechte eingabewerte in regal()</font>");   
+   //hier für die Brettpositionen
+    for (k=[1:brettanzahl-1])
+	{
+		if(!(brettpositionen[k]-$thickness>brettpositionen[k-1])) echo("<font color='red'>  vehlerhafter Eingabewert in fächer </font>");   
+	}     
+    if (!(brettpositionen[0])>0&&(brettpositionen[brettanzahl-1])<innenhoehe-$thickness)cho("<font color='red'>  vehlerhafter Eingabewert in fächer </font>");   
+   
  
   
     
