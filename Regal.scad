@@ -55,7 +55,7 @@ module regal(
     if(modus==4) bord();
     if(modus==5) seitenwand();
     if(modus==6) animation();
-	    if(modus==7) querbrett();
+
    DELTA = 0.001; 
         //DELTA Produziert einen minimalen Abstand zwischen dein Teilen, damit hier überhaupt ein Schnitt stattfindet dieses findet im Modul teile() statt.
     
@@ -75,13 +75,10 @@ module regal(
     brettpositionen=aufteiler(); //die höhen der bretter gemessen am innenboden 
     echo(brettpositionen);
     brettanzahl=len(brettpositionen);
-
-	querbrettpositionen=aufteiler(faecher[1],innenbreite);
-	echo(querbrettpositionen);
     
     // die folgende Funktion ermöglicht, dass für die Variable faecher sowohl eine Zahl (die anzahl der Fächer) als auch ein Vector(die positionen der Bretter) eingegeben werden können. Die DefaultWerte sind für diesen zweck eingestellt, in zukünftigen Designs könnte sie jedoch durchaus auch für andere ähnliche zwecke verwendet werden. Bekommt Sie einen Vektor (mit tatsächlichen einträgen) so gibt sie diesen wider aus. Bekommt sie eine Zahl und eine laenge, so gibt sie einen entsprechenden Vektor aus, der die Länge in eine entsprechende Anzahl von fächern unter einbeziehung der aktuellen $thickness aufteilt.
     
-    function aufteiler(x=faecher[0],laenge=innenhoehe)
+    function aufteiler(x=faecher,laenge=innenhoehe)
         =(
             len(x)>=1  ?   x   
             :
@@ -121,8 +118,6 @@ module regal(
             square([innenhoehe, innenbreite]);  //hauptteil
             for (k = brettpositionen)
                 translate([k, 0]) bord_rueckwand(false);
-	for (k = querbrettpositionen)
-                  #  translate([0, k]) rotate(-90) querbrett_rueckwand(false);
         }
         mirror() deckel_rueckwand(true);
         translate( [innenhoehe, 0]) deckel_rueckwand(true);
@@ -142,8 +137,6 @@ module regal(
             translate([rueckrand, $thickness+seitenrand]) deckel_rueckwand(false);
             for (k = [$thickness+seitenrand, breite-seitenrand])
                 translate([0, k, 0]) deckel_seitenwand(false);
-		  for (k = querbrettpositionen)
-                    translate([$thickness+rueckrand, k+2*$thickness+seitenrand]) deckel_querbrett(false);
         }
     }
     
@@ -162,13 +155,6 @@ module regal(
         deckel_seitenwand(true);
         translate([ 0,innenhoehe]) mirror([0,1]) deckel_seitenwand(true);
     }
-	module querbrett()
-	{
-		square([innentiefe,innenhoehe]);
-		deckel_querbrett();
-		translate([0,innenhoehe])mirror([0,1])deckel_querbrett(true);
-		 mirror()querbrett_rueckwand(z = true);
-	}
     
     // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. 
    //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
@@ -197,15 +183,31 @@ module regal(
     {
         rotate(-90) verzahnung(tiefe, z);
     } 
+       
     
-	module deckel_querbrett(z=true)
-	{
-		rotate(-90) verzahnung(innentiefe,z);
-	}   
-   module querbrett_rueckwand(z = true)
+    // Das folgende Code frakment wird eigendlich nicht mehr gebraucht, da sein ergebnis als spezialfall des Moduls animation() erzeugt werden kann. Zu anschauungszwecken lasse ich es aber ersteinmal da. Es diente das vertige objekt zu sehen. Dieses sollte immer eines der ersten Dinge sein, die man schreibt wenn. Man Schnittmuster für ein objekt macht.
+    
+    /*
+    module assemble()
     {
-        verzahnung(innenhoehe, z);
+        for (v = [[0, $thickness, $thickness], [0, breite, $thickness]])
+            translate(v)
+                rotate([90,0,0])
+                    linear_extrude($thickness) seitenbrett();
+        
+        for (v=[[0,0,0],[0,0,hoehe-$thickness]])
+            translate(v)
+                linear_extrude($thickness) deckel();
+    
+        translate([$thickness, $thickness, $thickness]) 
+            rotate([0,-90,0])
+                linear_extrude($thickness) rueckwand();
+    
+        for (k = brettpositionen)
+            translate([$thickness, $thickness, k+$thickness])
+                linear_extrude($thickness) bord();
     }
+    */
     
 
 // Das Modul teile() Puzzeled die 2d formen so zusammen, das sie als gemeinsames schnittmuster ausgegeben werden können.
@@ -245,12 +247,6 @@ module regal(
                  translate([$thickness+rueckrand, $thickness+seitenrand, $thickness])
                 rotate([0,-90,0])
                     linear_extrude($thickness) rueckwand();
-              
-		  for (k = querbrettpositionen)
-                    translate([$thickness+rueckrand, k+2*$thickness+seitenrand, $thickness])
-                         rotate([90,0,0])
-				linear_extrude($thickness) querbrett();
-		
 
                 for (k = brettpositionen)
                     translate([$thickness+rueckrand, $thickness+seitenrand, k+$thickness])
@@ -271,8 +267,6 @@ module regal(
             } 
     }
 }
-
-module 
 
 
 
