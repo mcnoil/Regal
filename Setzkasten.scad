@@ -105,10 +105,20 @@ module regal(
     
     module bord()
     {
-            square([innentiefe, innenbreite]); //hauptteil
-            mirror() bord_rueckwand(true);
+        difference()
+        {
+            union()
+            {
+                square([innentiefe, innenbreite]); //hauptteil
+                mirror() bord_rueckwand(true);
                     bord_seitenwand(true);
            translate( [0, innenbreite]) mirror([0,1]) bord_seitenwand(true);
+        
+            }
+            for(k=querbrettpositionen)
+            translate([0,k])querbrett_bord(false);
+            
+        }    
         
     }
     
@@ -122,13 +132,14 @@ module regal(
             for (k = brettpositionen)
                 translate([k, 0]) bord_rueckwand(false);
 	for (k = querbrettpositionen)
-                  #  translate([0, k]) rotate(-90) querbrett_rueckwand(false);
+                  #  translate([0, k+$thickness]) rotate(-90) querbrett_rueckwand(false);
         }
         mirror() deckel_rueckwand(true);
         translate( [innenhoehe, 0]) deckel_rueckwand(true);
         rotate(-90) seitenwand_rueckwand();
         translate([0, innenbreite])
                 rotate(-90) mirror() seitenwand_rueckwand();
+       // querbrett_rueckwand(false);
     }
     
     
@@ -153,7 +164,8 @@ module regal(
     {
         difference()
         {
-            square([tiefe, innenhoehe]);	//hauptteil
+          
+               square([tiefe, innenhoehe]);	//hauptteil
             for (v = brettpositionen)
                 translate([$thickness+rueckrand, v+$thickness]) 
                     bord_seitenwand(false);
@@ -164,10 +176,18 @@ module regal(
     }
 	module querbrett()
 	{
-		square([innentiefe,innenhoehe]);
-		deckel_querbrett();
-		translate([0,innenhoehe])mirror([0,1])deckel_querbrett(true);
-		 mirror()querbrett_rueckwand(z = true);
+        difference()
+        {
+            union()
+            {
+                square([innentiefe,innenhoehe]);
+                deckel_querbrett();
+                translate([0,innenhoehe])mirror([0,1])deckel_querbrett(true);
+                 mirror()querbrett_rueckwand(z = true);
+            }
+            for(k=brettpositionen)
+            translate([0,k]) querbrett_bord(z=true);
+        }
 	}
     
     // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. 
@@ -205,6 +225,10 @@ module regal(
    module querbrett_rueckwand(z = true)
     {
         verzahnung(innenhoehe, z);
+    }
+    module querbrett_bord(z=true)
+    {
+        translate([-($thickness+rand),0])steckung(tiefe,z);
     }
     
 
@@ -246,7 +270,8 @@ module regal(
                 rotate([0,-90,0])
                     linear_extrude($thickness) rueckwand();
               
-		  for (k = querbrettpositionen)
+
+            for (k = querbrettpositionen)
                     translate([$thickness+rueckrand, k+2*$thickness+seitenrand, $thickness])
                          rotate([90,0,0])
 				linear_extrude($thickness) querbrett();
@@ -271,9 +296,19 @@ module regal(
             } 
     }
 }
+ module steckung(laenge,z=true)
+{
+	
+translate([laenge*tensor(z)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+$spiel]);
 
-module 
-
+}
+ function tensor (z)
+	=(
+	z ? 1
+	:
+	!z ? 0
+    : false
+	);
 
 
 
