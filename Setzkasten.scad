@@ -132,7 +132,7 @@ module regal(
             for (k = brettpositionen)
                 translate([k, 0]) bord_rueckwand(false);
 	for (k = querbrettpositionen)
-                  #  translate([0, k+$thickness]) rotate(-90) querbrett_rueckwand(false);
+                    translate([0, k+$thickness]) rotate(-90) querbrett_rueckwand(false);
         }
         mirror() deckel_rueckwand(true);
         translate( [innenhoehe, 0]) deckel_rueckwand(true);
@@ -311,4 +311,8 @@ translate([laenge*tensor(z)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+
 	);
 
 
+//will eine Liste, gibt für die Liste den ersten Index mit kleinstem Wert herraus.
+function kleinster(v)=search(min(v),v)[0];
+
+function einheitsvektor(i,n)=[for(k=[0:n-1]) (k==i) ? 1 : 0];  
 
