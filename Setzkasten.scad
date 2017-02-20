@@ -78,6 +78,7 @@ module Setzkasten(
 
 	querbrettpositionen=aufteiler(faecher[1],innenbreite);
 	echo(querbrettpositionen);
+    querbrettanzahl=len(querbrettpositionen);
     
     // die folgende Funktion ermöglicht, dass für die Variable faecher sowohl eine Zahl (die anzahl der Fächer) als auch ein Vector(die positionen der Bretter) eingegeben werden können. Die DefaultWerte sind für diesen zweck eingestellt, in zukünftigen Designs könnte sie jedoch durchaus auch für andere ähnliche zwecke verwendet werden. Bekommt Sie einen Vektor (mit tatsächlichen einträgen) so gibt sie diesen wider aus. Bekommt sie eine Zahl und eine laenge, so gibt sie einen entsprechenden Vektor aus, der die Länge in eine entsprechende Anzahl von fächern unter einbeziehung der aktuellen $thickness aufteilt.
     
@@ -257,6 +258,10 @@ module Setzkasten(
                 [hoehe+DELTA, innenbreite+2*($thickness+tiefe+DELTA)]])
             translate(v)
                 rotate(-90) deckel();
+        for (k = [1 : querbrettanzahl])
+             translate( [$thickness, innenbreite+$thickness+2*(tiefe+DELTA)+k*(innentiefe+DELTA+$thickness)]) 
+                rotate(-90)querbrett();
+        
     }
     
     // Das Modul animation() erzeugt eine animierte Bauanleitung. Wobei animation($t=1) das vertige Modell zeigt.
@@ -316,3 +321,6 @@ function kleinster(v)=search(min(v),v)[0];
 
 function einheitsvektor(i,n)=[for(k=[0:n-1]) (k==i) ? 1 : 0];  
 
+
+// gibt den iten einheitsvektor der länge n aus
+function einheitsvektor(i,n)=[for(k=[0:n-1]) (k==i) ? 1 : 0];  
