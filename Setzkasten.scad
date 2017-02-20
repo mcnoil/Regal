@@ -37,7 +37,7 @@ seitenwand=5;
 animation=6;
 
 
-module regal(
+module Setzkasten(
             tiefe=100,
             breite=100,
             hoehe=350,
