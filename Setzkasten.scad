@@ -232,7 +232,26 @@ module Setzkasten(
         translate([-($thickness+rand),0])steckung(tiefe,z);
     }
     
-
+//die funktion puzzler liefert eine Liste für die aufteilung der borde auf der arbeitsfläche.
+    
+    function puzzler(x)=
+    x[2]<=0 ? x[0]
+    :kleinster(x[1])==0 ? 
+        puzzler ([
+                einheitsvektor(0,querbrettanzahl+3)+x[0],
+                einheitsvektor(0,querbrettanzahl+3)*(innentiefe+$thickness)+x[1],
+                x[2]-1
+                ])
+    :        puzzler ([
+                einheitsvektor(kleinster(x[1]),querbrettanzahl+3)+x[0],
+                einheitsvektor(kleinster(x[1]),querbrettanzahl+3)*(innenbreite+2*$thickness)+x[1],
+                x[2]-1
+                ]);
+    
+    bordverteilung=puzzler([nullvektor(querbrettanzahl+3),
+    (einheitsvektor(1,querbrettanzahl+3)+einheitsvektor(2,querbrettanzahl+3))*breite,
+    brettanzahl]);
+    
 // Das Modul teile() Puzzeled die 2d formen so zusammen, das sie als gemeinsames schnittmuster ausgegeben werden können.
 
 
@@ -242,15 +261,16 @@ module Setzkasten(
 
         translate([$thickness, $thickness]) rueckwand();
         
-        for (v = 
-                [
-                    [$thickness, innenbreite+2*$thickness+tiefe+DELTA], 
-                    [$thickness, innenbreite+2*($thickness+tiefe+DELTA)]
-                ])
-            translate(v) 
-                rotate(-90) seitenwand();
+        for (v =[1,2])
+            translate([$thickness, innenbreite+2*$thickness+v*(tiefe+DELTA)])
+               {
+                   rotate(-90) seitenwand(); 
+                   if(bordverteilung[v]>0) for(l=[0:bordverteilung[v]-1])
+                    translate([hoehe+breite+l*(innenbreite+2*$thickness)+DELTA,-$thickness]) 
+                   rotate(-90) bord();
+               }
         
-        for (k = [1 : brettanzahl])
+        for (k = [1 : bordverteilung[0]])
             translate([hoehe+k*(innentiefe+$thickness+DELTA)-innentiefe, $thickness])
                 bord();
         
@@ -259,8 +279,12 @@ module Setzkasten(
             translate(v)
                 rotate(-90) deckel();
         for (k = [1 : querbrettanzahl])
-             translate( [$thickness, innenbreite+$thickness+2*(tiefe+DELTA)+k*(innentiefe+DELTA+$thickness)]) 
+            
+             translate( [$thickness, innenbreite+$thickness+2*(tiefe+DELTA)+k*(innentiefe+DELTA+$thickness)]) {
                 rotate(-90)querbrett();
+                if(bordverteilung[k+2]>0) for(l=[0:bordverteilung[k+2]-1])
+                    translate([hoehe+l*(innenbreite+2*$thickness),0]) rotate(-90) bord();
+            }
         
     }
     
@@ -321,6 +345,4 @@ function kleinster(v)=search(min(v),v)[0];
 
 function einheitsvektor(i,n)=[for(k=[0:n-1]) (k==i) ? 1 : 0];  
 
-
-// gibt den iten einheitsvektor der länge n aus
-function einheitsvektor(i,n)=[for(k=[0:n-1]) (k==i) ? 1 : 0];  
+function nullvektor(n)=[for(k=[1:n]) 0];
