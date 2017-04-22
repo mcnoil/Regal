@@ -17,7 +17,13 @@ module seitenteil()
 {
 difference()
 {
-polygon([[0,-5],[0,stufenbreite],[ueberwindungshoehe,platz+stufenbreite],[ueberwindungshoehe,platz-5]]);
+//polygon([[0,-5],[0,stufenbreite],[ueberwindungshoehe,platz+stufenbreite],[ueberwindungshoehe,platz-5]]);
+    intersection()
+    {
+    square([ueberwindungshoehe,platz]);
+    translate([-stufenbreite,0])rotate(-atan2(stufenhoehe,stufenbreite)) 
+        square([stufenbreite+stufenhoehe,ueberwindungshoehe+platz]);
+    }
 loecher();
 }
 }
@@ -31,9 +37,12 @@ module stufe()
 module gesammt()
 {
 for (k=[0,breite-$thickness]) translate([k,0,0])rotate(-90,[0,1,0])linear_extrude($thickness) seitenteil();
-for(k=[1:stufenzahl]) translate(k*[0,stufenbreite,stufenhoehe])  linear_extrude($thickness) stufe();
+for(k=[1:stufenzahl-1]) translate(k*[0,stufenbreite,stufenhoehe])  linear_extrude($thickness) stufe();
 }
 
 //stufe();
-for(k=[0,2*stufenbreite]) translate([0,k])seitenteil();
-//gesammt();
+
+gesammt();
+//seitenteil();
+
+//
