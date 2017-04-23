@@ -5,7 +5,7 @@ ueberwindungshoehe=170;
 platz=280;
 breite=50;
 stufenbreite=30;
-stufenzahl=platz/stufenbreite;
+stufenzahl=(platz/stufenbreite)-1;
 stufenhoehe=ueberwindungshoehe/stufenzahl;
 staecker=stufenbreite-4;
 
@@ -17,8 +17,8 @@ module seitenteil()
 {
 difference()
 {
-//polygon([[0,-5],[0,stufenbreite],[ueberwindungshoehe,platz+stufenbreite],[ueberwindungshoehe,platz-5]]);
-    intersection()
+polygon([[$thickness,0],[0,0],[0,stufenbreite],[ueberwindungshoehe,platz],[ueberwindungshoehe+$thickness,platz],[ueberwindungshoehe+$thickness,platz-stufenbreite]]);
+   * intersection()
     {
     square([ueberwindungshoehe,platz]);
     translate([-stufenbreite,0])rotate(-atan2(stufenhoehe,stufenbreite)) 
@@ -37,7 +37,7 @@ module stufe()
 module gesammt()
 {
 for (k=[0,breite-$thickness]) translate([k,0,0])rotate(-90,[0,1,0])linear_extrude($thickness) seitenteil();
-for(k=[1:stufenzahl-1]) translate(k*[0,stufenbreite,stufenhoehe])  linear_extrude($thickness) stufe();
+for(k=[1:stufenzahl]) translate(k*[0,stufenbreite,stufenhoehe])  linear_extrude($thickness) stufe();
 }
 
 //stufe();
