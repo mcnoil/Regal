@@ -45,3 +45,7 @@ module x_y(z=true)
     steckung(tischhoehe-$thickness,z);
     
 }
+module platte_x()
+{
+    verzahnung(radius-2*rand );
+}
