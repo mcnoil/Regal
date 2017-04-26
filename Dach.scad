@@ -1,10 +1,10 @@
 include<lib.scad>
 $thickness=3;
 $spiel=0;
-dachhoehe=100;
-dachlaenge =600;
+dachhoehe=250;
+dachlaenge =600-18;
 dachbreite=300;
-rand=5;
+rand=9;
 halter=10;
  deckbreite=norm([dachhoehe,dachbreite/2]);
  dachwinkel=atan2(dachhoehe,dachbreite/2);
@@ -15,6 +15,8 @@ halter=10;
       mirror()    translate([0,dachhoehe])rotate(90+dachwinkel) traeger_dachplatte(z=true);
 
  }
+ //traeger();
+ //dachplatte();
  module dachplatte()
  {
      difference()
@@ -25,15 +27,18 @@ halter=10;
      
  }
 
-gesammt();
+//gesammt();
  module gesammt()
  {
     # for(k=[$thickness,dachlaenge])
      translate([0,k,0])rotate(90,[1,0,0])linear_extrude($thickness)traeger();
   
-    translate([0,-rand,dachhoehe]) rotate(dachwinkel,[0,1,0])linear_extrude($thickness)dachplatte();
-    mirror()translate([0,-rand,dachhoehe]) rotate(dachwinkel,[0,1,0])linear_extrude($thickness)dachplatte();
+    translate([dachbreite/2,-rand,0]) rotate(dachwinkel,[0,1,0])linear_extrude($thickness)
+          mirror() Dachplatte_mit_Fenster([deckbreite-60-60,60],60,60,0); 
 
+        
+
+    mirror()translate([0,-rand,dachhoehe]) rotate(dachwinkel,[0,1,0])linear_extrude($thickness) dachplatte();
  }
  
  module traeger_dachplatte(z=true)
@@ -49,27 +54,31 @@ gesammt();
  
  module fenster(position,breite,hoehe,rundung)
  {
+             translate(position+[rundung,rundung]) 
+{
      difference()
     {
-        translate(position+[rundung,rundung]) 
             minkowski()
                 {
-                     square([hoehe-rundung,breite-]);
-                    sphere(rundung)
+                     square([hoehe-rundung,breite]);
+                    sphere(rundung);
                 }
-         for(k=[1/3*breite,2/3*breite]) translate([hoehe-7,k]) cube(2);
+         for(k=[1/4*breite,3/4*breite]) translate([hoehe-7,k]) square([3,5]);
      }
-                                    
-         
-     
  }
+ }                                  
+    Dachplatte_mit_Fenster([deckbreite-60-60,60],60,60,0);     
+     
+ 
  module Dachplatte_mit_Fenster(position,breite,hoehe,rundung)
  {
      difference ()
      {
          dachplatte();
          fenster(position=position,breite=breite,hoehe=hoehe,rundung=rundung);
-                  for(k=[1/3*breite,2/3*breite]) translate([hoehe+5,k]) cube(2);
+         translate(position)
+                  for(k=[1/4*breite,3/4*breite]) translate([hoehe+5,k]) square([3,5]);
+         translate([0,180]) square([deckbreite-60,dachlaenge-180-120]);
 
      }
  }
