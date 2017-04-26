@@ -38,9 +38,21 @@ module zapfen(zahnlaenge=10)
     translate([-wurzel, 0.5*$spiel]) square([$thickness+wurzel, zahnlaenge - $spiel]);
 }
 
+ function tensor (z)
+	=(
+	z ? 1
+	:
+	!z ? 0
+    : false
+	);
+
+ module steckung(laenge,z=true)
+{
+	
+translate([laenge*tensor(z)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+$spiel]);
+
+}
 //Das Modul aufbau gibt eine Animationssystematik. Die mit ihm aufgerufenen Module erscheinen in der Reihenfolge des aufrufes.
-
-
 module aufbau()
 {
     x=1/$children;
