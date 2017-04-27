@@ -1,17 +1,24 @@
 include <lib.scad>;
 $thickness=3;
 $spiel=0;
-radius=25;
+radius=30;
 tischhoehe=50;
-rand=10;
+rand=5;
+zahn=5;
 
 //platte();
 
 module platte()
 {
+    difference()
+    {
     circle(radius);
+        translate([radius-rand,-0.5*$thickness])rotate(90)platte_y(false);
+                translate([-0.5*$thickness,-radius+rand])platte_x(false);
+
+    }
 }
-//gesammt();
+gesammt();
 module gesammt()
 {
     translate ([0,0,tischhoehe-$thickness])linear_extrude($thickness)platte();
@@ -27,6 +34,8 @@ module xbein()
         square([tischhoehe-$thickness,2*(radius-rand)]);
        translate([0,radius-rand-0.5*$thickness]) x_y(true);
     }
+         translate([tischhoehe-$thickness,0])   platte_x(true);
+
 }
 //ybein();
 module ybein()
@@ -35,8 +44,9 @@ module ybein()
     {
     square([2*(radius-rand),tischhoehe-$thickness]);
            translate([radius-rand+0.5*$thickness,0])
-        #rotate(90)x_y(false);
+        rotate(90)x_y(false);
     }
+     translate([2*(radius-rand),tischhoehe-$thickness])rotate(90)platte_y(true);
 
 }
 
@@ -45,7 +55,16 @@ module x_y(z=true)
     steckung(tischhoehe-$thickness,z);
     
 }
-module platte_x()
+//platte_x();
+
+module platte_x(z)
 {
-    verzahnung(radius-2*rand );
+        for(k=[0,radius-rand]) translate([0,k])verzahnung((radius-rand),z,zahn );
+
+}
+
+module platte_y(z)
+{
+        verzahnung(2*(radius-rand),z,zahn );
+
 }
