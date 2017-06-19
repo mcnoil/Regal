@@ -16,7 +16,7 @@ innenbreite=300;
 innentiefe=200;
 innenhoehe=200;
 
-rippenabstand=100; 
+rippenabstand=50; 
 
 module unterseite()
 {
@@ -36,19 +36,28 @@ module seite()
     square([tiefe,hoehe]);
 }
 
-module tiefe_rippe()
+module tiefe_rippe(pos)
 {
     difference()
     {
-    square([tiefe,hoehe]);
-    translate([(tiefe-innentiefe)/2,hoehe-innenhoehe]) square ([innentiefe,innenhoehe]);
+        square([tiefe,hoehe]);
+    if  ( pos>=(breite-innenbreite)/2
+         &&
+         pos<=(breite+innenbreite)/2)
+           
+            translate([(tiefe-innentiefe)/2,hoehe-innenhoehe]) 
+                square ([innentiefe,innenhoehe]);
     }
 }
-module breite_rippe()
+module breite_rippe(pos)
 {
     difference()
     {
-    square([hoehe,breite]);
+        square([hoehe,breite]);
+            if  ( pos>=(tiefe-innentiefe)/2
+                 &&
+                 pos<=(tiefe+innentiefe)/2)
+           
     translate([hoehe-innenhoehe,(breite-innenbreite)/2]) square ([innenhoehe,innenbreite]);
     }
 }
@@ -60,8 +69,9 @@ module assemble()
     translate([tiefe,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) rueckseite();
    for(k=[[0,0,0],[0,breite,0]]) translate(k) rotate(90,[1,0,0]) linear_extrude($thickness) seite();
           for(k=[rippenabstand:rippenabstand:breite-rippenabstand]) translate([0,k,0]) 
-   rotate(90,[1,0,0]) linear_extrude($thickness) tiefe_rippe();
-             for(k=[rippenabstand:rippenabstand:tiefe-rippenabstand])  translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breite_rippe();
+  
+          rotate(90,[1,0,0]) linear_extrude($thickness) tiefe_rippe(k);
+             for(k=[rippenabstand:rippenabstand:tiefe-rippenabstand])  translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breite_rippe(k);
 
 
 
