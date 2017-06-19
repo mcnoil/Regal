@@ -1,4 +1,4 @@
-//$thickness=3; 
+ //$thickness=3; 
 //$spiel=0;  //wie sehr solls Wackeln
 
 include <lib.scad>;
