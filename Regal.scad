@@ -313,7 +313,6 @@ module zapfen(zahnlaenge=10)
 
 module aufbau()
 {
-    x=1/$children;
-    for(n=[0:$children-1])if($t>=x*n)children(n);
+    for(n=[0:$children-1])if($t*$children>=n)children(n);
 }
 
