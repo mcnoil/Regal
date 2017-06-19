@@ -41,10 +41,9 @@ module Setzkasten(
             tiefe=100,
             breite=100,
             hoehe=350,
-            faecher=5,
+            faecher=[3,3],
             modus=0,
-            rand=5,
-             $thickness=3
+            rand=5
             )
 {
     //hier wird der Modus ausgeführt. die entsprechenden Module stehen weiter unten.
