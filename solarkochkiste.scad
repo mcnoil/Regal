@@ -115,28 +115,39 @@ module sockel()
     difference()
     {
         fenster();
-        square([innentiefe,innenbreite]);
+        translate([-rand,-rand]) square([innentiefe+2*rand,innenbreite+2*rand]);
     }
 }
 module assemble()
 {
    translate([$thickness,rand+$thickness,rand]) linear_extrude($thickness) unterseite();
-   translate([$thickness,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) vorderseite();
+   
+    translate([$thickness,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) vorderseite();
+    
     translate([tiefe,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) rueckseite();
-   for(k=[[$thickness,$thickness+rand,0],[$thickness,breite-rand,0]]) translate(k) rotate(90,[1,0,0]) linear_extrude($thickness) seite();
+   
+    for(k=[[$thickness,$thickness+rand,0],[$thickness,breite-rand,0]]) 
+       translate(k) rotate(90,[1,0,0]) linear_extrude($thickness) seite();
+   
    translate([$thickness,rand+$thickness,rand+$thickness])
     {   
        for(k=[rippenabstand:rippenabstand:restbreite]) translate([0,k,0]) 
-      
-              rotate(90,[1,0,0]) linear_extrude($thickness) tiefe_rippe(k);
+            rotate(90,[1,0,0]) linear_extrude($thickness) tiefe_rippe(k);
        
-                 for(k=[rippenabstand:rippenabstand:resttiefe])  translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breite_rippe(k);
-                 }
-                 translate([0,0,hoehe])linear_extrude($thickness)deckplate();
+         for(k=[rippenabstand:rippenabstand:resttiefe])  
+             translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breite_rippe(k);
+     }
+                
+     translate([0,0,hoehe])linear_extrude($thickness)deckplate();
+     
+     
+     translate([(tiefe-innentiefe)/2,(breite-innenbreite)/2,hoehe+$thickness])
+        linear_extrude($thickness) sockel();
+
 
 
 }
- //assemble();
+ assemble();
 //glasrahmenoben();
 //glasrahmen();
-sockel();
+//sockel();
