@@ -7,8 +7,10 @@ tiefe=300;
 hoehe=300;
 rand=10;
 
-glasbreite=400;
-glastiefe=400;
+glasbreite=550;
+glastiefe=250;
+fensterrundung=50;
+
 spiegelbreite=400;
 spiegeltiefe=400;
 
@@ -16,7 +18,7 @@ innenbreite=400;
 innentiefe=100;
 innenhoehe=100;
 
-rippenabstand=50; 
+rippenabstand=150; 
 
 resthoehe=hoehe-($thickness+rand);
 restbreite=breite-2*($thickness+rand);
@@ -77,6 +79,45 @@ module deckplate()
     }
 }
 
+module glasrahmenmitte()
+{
+     difference()
+     {
+         square([tiefe,breite]);
+         translate([(tiefe-glastiefe)/2,(breite-glasbreite)/2]) square([glastiefe,glasbreite]);
+     }   
+}
+module fenster()
+{
+    minkowski()
+    {
+        square([innentiefe,innenbreite]);
+        circle(fensterrundung);
+    }
+}
+module glasrahmenoben()
+{
+    difference()
+    {
+        square([tiefe,breite]);
+            translate([(tiefe-innentiefe)/2,(breite-innenbreite)/2])fenster();
+    }
+    
+}
+module glasrahmen()
+{
+    for(k=[[0,0,0],[0,0,2*$thickness]])
+        translate(k)linear_extrude($thickness)glasrahmenoben();
+    translate([0,0,$thickness])linear_extrude($thickness) glasrahmenmitte();
+}
+module sockel()
+{
+    difference()
+    {
+        fenster();
+        square([innentiefe,innenbreite]);
+    }
+}
 module assemble()
 {
    translate([$thickness,rand+$thickness,rand]) linear_extrude($thickness) unterseite();
@@ -95,5 +136,7 @@ module assemble()
 
 
 }
- assemble();
-//deckplate();
+ //assemble();
+//glasrahmenoben();
+//glasrahmen();
+sockel();
