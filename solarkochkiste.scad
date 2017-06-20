@@ -68,6 +68,15 @@ module breite_rippe(pos)
     }
 }
 
+module deckplate()
+{
+    difference()
+    {
+        square([tiefe,breite]);
+        translate([(tiefe-innentiefe)/2,(breite-innenbreite)/2])square([innentiefe,innenbreite]);
+    }
+}
+
 module assemble()
 {
    translate([$thickness,rand+$thickness,rand]) linear_extrude($thickness) unterseite();
@@ -80,9 +89,11 @@ module assemble()
       
               rotate(90,[1,0,0]) linear_extrude($thickness) tiefe_rippe(k);
        
-            #     for(k=[rippenabstand:rippenabstand:resttiefe])  translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breite_rippe(k);
+                 for(k=[rippenabstand:rippenabstand:resttiefe])  translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breite_rippe(k);
                  }
+                 translate([0,0,hoehe])linear_extrude($thickness)deckplate();
 
 
 }
  assemble();
+//deckplate();
