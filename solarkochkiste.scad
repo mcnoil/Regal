@@ -118,6 +118,16 @@ module sockel()
         translate([-rand,-rand]) square([innentiefe+2*rand,innenbreite+2*rand]);
     }
 }
+ module glasrahmenunten()
+{
+        difference()
+    {
+        square([tiefe,breite]);
+            translate([(tiefe-innentiefe)/2,(breite-innenbreite)/2]) sockel();
+    }
+    
+}
+
 module assemble()
 {
    translate([$thickness,rand+$thickness,rand]) linear_extrude($thickness) unterseite();
@@ -143,7 +153,7 @@ module assemble()
      
      translate([(tiefe-innentiefe)/2,(breite-innenbreite)/2,hoehe+$thickness])
         linear_extrude($thickness) sockel();
-
+    translate([0,0,hoehe+100*sin(180*$t)]) glasrahmen();
 
 
 }
