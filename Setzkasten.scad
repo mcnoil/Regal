@@ -1,4 +1,4 @@
-//$thickness=3; 
+ //$thickness=3; 
 //$spiel=0;  //wie sehr solls Wackeln
 
 include <lib.scad>;
@@ -41,10 +41,9 @@ module Setzkasten(
             tiefe=100,
             breite=100,
             hoehe=350,
-            faecher=5,
+            faecher=[3,3],
             modus=0,
-            rand=5,
-             $thickness=3
+            rand=5
             )
 {
     //hier wird der Modus ausgeführt. die entsprechenden Module stehen weiter unten.
@@ -325,20 +324,6 @@ module Setzkasten(
             } 
     }
 }
- module steckung(laenge,z=true)
-{
-	
-translate([laenge*tensor(z)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+$spiel]);
-
-}
- function tensor (z)
-	=(
-	z ? 1
-	:
-	!z ? 0
-    : false
-	);
-
 
 //will eine Liste, gibt für die Liste den ersten Index mit kleinstem Wert herraus.
 function kleinster(v)=search(min(v),v)[0];

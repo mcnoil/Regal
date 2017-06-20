@@ -55,7 +55,6 @@ translate([laenge*tensor(z)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+
 //Das Modul aufbau gibt eine Animationssystematik. Die mit ihm aufgerufenen Module erscheinen in der Reihenfolge des aufrufes.
 module aufbau()
 {
-    x=1/$children;
-    for(n=[0:$children-1])if($t>=x*n)children(n);
+    for(n=[0:$children-1])if($t*$children>=n)children(n);
 }
 
