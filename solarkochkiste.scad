@@ -44,7 +44,7 @@ module seite()
     square([resttiefe,hoehe]);
 }
 
-module tiefe_rippe(pos)
+module tiefeRippe(pos)
 {
     difference()
     {
@@ -57,7 +57,10 @@ module tiefe_rippe(pos)
                 square ([innentiefe,innenhoehe]);
     }
 }
-module breite_rippe(pos)
+
+tiefeRippePositionen=[ for(k=[rippenabstand:rippenabstand:restbreite]) k];
+
+module breiteRippe(pos)
 {
     difference()
     {
@@ -69,6 +72,7 @@ module breite_rippe(pos)
     translate([resthoehe-innenhoehe,(restbreite-innenbreite)/2]) square ([innenhoehe,innenbreite]);
     }
 }
+breiteRippePositionen=[for (k=[rippenabstand:rippenabstand:resttiefe])  k];
 
 module deckplate()
 {
@@ -141,11 +145,11 @@ module assemble()
    
    translate([$thickness,rand+$thickness,rand+$thickness])
     {   
-       for(k=[rippenabstand:rippenabstand:restbreite]) translate([0,k,0]) 
-            rotate(90,[1,0,0]) linear_extrude($thickness) tiefe_rippe(k);
+       for(k=tiefeRippePositionen) translate([0,k,0]) 
+            rotate(90,[1,0,0]) linear_extrude($thickness) tiefeRippe(k);
        
-         for(k=[rippenabstand:rippenabstand:resttiefe])  
-             translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breite_rippe(k);
+         for(k=breiteRippePositionen)  
+             translate([k,0,0]) rotate(-90,[0,1,0]) linear_extrude($thickness) breiteRippe(k);
      }
                 
      translate([0,0,hoehe])linear_extrude($thickness)deckplate();
