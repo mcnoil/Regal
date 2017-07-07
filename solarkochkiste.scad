@@ -131,6 +131,27 @@ module sockel()
     }
     
 }
+module tiefeRippe_breiteRippe(x,y,a=true)
+{
+     if 
+     (
+         ( x>=(tiefe-innentiefe)/2-$thickness
+                 &&
+                x<=(tiefe+innentiefe)/2)
+        &&
+        ( y>=(restbreite-innenbreite)/2
+            &&
+            y<= (restbreite+innenbreite)/2+$thickness) 
+     )
+     {
+         steckkung(resthoehe-innenhoehe,a);
+     }
+     else
+     {
+         steckung(resthoehe,a);
+     }
+    
+}
 
 module assemble()
 {
