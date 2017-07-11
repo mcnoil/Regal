@@ -42,7 +42,7 @@ module regal(
             hoehe=350,
             faecher=5,
             modus=0,
-            rand=5,
+            rand=5
             )
 {
     //hier wird der Modus ausgeführt. die entsprechenden Module stehen weiter unten.
