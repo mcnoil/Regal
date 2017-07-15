@@ -55,6 +55,7 @@ module tiefeRippe(pos)
            
             translate([(resttiefe-innentiefe)/2,resthoehe-innenhoehe]) 
                 square ([innentiefe,innenhoehe]);
+    for(k=breiteRippePositionen) translate([k,0]) rotate(90) tiefeRippe_breiteRippe(k,pos,true);
     }
 }
 
@@ -70,6 +71,8 @@ module breiteRippe(pos)
                  pos<=(tiefe+innentiefe)/2)
            
     translate([resthoehe-innenhoehe,(restbreite-innenbreite)/2]) square ([innenhoehe,innenbreite]);
+                for(k=tiefeRippePositionen) translate([0,k-$thickness])  tiefeRippe_breiteRippe(pos,k,false);
+
     }
 }
 breiteRippePositionen=[for (k=[rippenabstand:rippenabstand:resttiefe])  k];
@@ -144,7 +147,7 @@ module tiefeRippe_breiteRippe(x,y,a=true)
             y<= (restbreite+innenbreite)/2+$thickness) 
      )
      {
-         steckkung(resthoehe-innenhoehe,a);
+         steckung(resthoehe-innenhoehe,a);
      }
      else
      {
@@ -164,7 +167,7 @@ module assemble()
     for(k=[[$thickness,$thickness+rand,0],[$thickness,breite-rand,0]]) 
        translate(k) rotate(90,[1,0,0]) linear_extrude($thickness) seite();
    
-   translate([$thickness,rand+$thickness,rand+$thickness])
+  translate([$thickness,rand+$thickness,rand+$thickness])
     {   
        for(k=tiefeRippePositionen) translate([0,k,0]) 
             rotate(90,[1,0,0]) linear_extrude($thickness) tiefeRippe(k);
@@ -182,6 +185,7 @@ module assemble()
 
 
 }
+//breiteRippe(breiteRippePositionen[0]);
  assemble();
 //glasrahmenoben();
 //glasrahmen();
