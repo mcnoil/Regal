@@ -285,7 +285,7 @@ module Schrank(
             
              translate([wandtiefe,seitenrand-0.5*rand,0])
                // rotate(-90*$t)
-                    translate([$thickens,0,0]) rotate(-90,[0,1,0])  linear_extrude($thickness)tuer();
+                    translate([$thickness,0,0]) rotate(-90,[0,1,0])  linear_extrude($thickness)tuer();
         
 
                 for (v = [[0, 0, 0], [0, 0, hoehe-$thickness]])
