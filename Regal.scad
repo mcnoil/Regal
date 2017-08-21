@@ -44,7 +44,6 @@ module regal(
             faecher=5,
             modus=0,
             rand=5,
-             $thickness=3
             )
 {
     //hier wird der Modus ausgeführt. die entsprechenden Module stehen weiter unten.
