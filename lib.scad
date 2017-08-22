@@ -78,6 +78,28 @@ module querriegel(zahnlaenge=10,rand=$thickness)
     translate([0,zahnlaenge]) square([$thickness+rand,zahnlaenge]);
     
 }
+module verquerriegelung(laenge, z = true,zahnlaenge=10)
+{
+   
+    positionen=[for (k = [3*zahnlaenge : 6*zahnlaenge : laenge-2*zahnlaenge])k];
+    if (!(len(positionen)>0)) echo("<font color='red'>verzahnungsfehler</font>");
+    if (len(positionen)==1) echo("<font color='red'>reicht dir ein Zahn?</font>");
+
+    rest=laenge-(positionen[len(positionen)-1]+3*zahnlaenge);
+    translate([0,(rest-3*zahnlaenge)/2])
+    {
+        for (k = positionen)
+        {
+               translate([0,k]) 
+		{ 
+                if (z)  querriegelzapfen(zahnlaenge=10);
+                else  querriegelstollen(zahnlaenge);
+                }
+         }
+     }
+}
+
+
 //Das Modul aufbau gibt eine Animationssystematik. Die mit ihm aufgerufenen Module erscheinen in der Reihenfolge des aufrufes.
 module aufbau()
 {
