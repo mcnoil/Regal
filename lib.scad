@@ -1,6 +1,7 @@
 // Das Modul verzahnugn() macht die form, für eine Reihe von Zähnen (true) beziehungsweise Löcher (false) für dies Zähne. Die laenge gibt an, über welche Strecke verzahnt werden soll, wobei darauf geachtet ist, dass dafor und dahinter genügend Platz bleibt. z gibt an, ob die form für den Zapfen oder für den Stollen gemacht werden soll. Und die zahnlaenge, wie  groß die Zähne werden.
 // Es benutzt die Module Zapfen (Zähne) und Stollen (Löcher). Ausserdem hängt es von den Besonderen Variablen $thickness und $spiel ab.
-
+//$thickness= 3;
+//$spiel=0;
 module verzahnung(laenge, z = true,zahnlaenge=10)
 {
    
@@ -51,6 +52,31 @@ module zapfen(zahnlaenge=10)
 	
 translate([laenge*tensor(z)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+$spiel]);
 
+}
+
+
+module querriegelzapfen(zahnlaenge=10)
+{
+     wurzel=0.1;  
+    //gibt an, wie weit sich der Zapfen mit seinem ursrpung überschneidet hierdurch wird verhindert, dass kleine rechenfehler dazu führen, dass er abgeschnitten wird.
+    translate([-wurzel, 0.5*$spiel]) difference()
+    {
+        square([3*$thickness+wurzel, 3*zahnlaenge - $spiel]);
+
+        translate([0,zahnlaenge])square([2*$thickness+wurzel, zahnlaenge + $spiel]);
+    }
+}
+module querriegelstollen(zahnlaenge=10)
+{
+    stollen(3*zahnlaenge);
+}
+
+
+module querriegel(zahnlaenge=10,rand=$thickness)
+{
+    translate([-rand,0])square([rand,3*zahnlaenge]);
+    translate([0,zahnlaenge]) square([$thickness+rand,zahnlaenge]);
+    
 }
 //Das Modul aufbau gibt eine Animationssystematik. Die mit ihm aufgerufenen Module erscheinen in der Reihenfolge des aufrufes.
 module aufbau()
