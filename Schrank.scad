@@ -20,7 +20,7 @@ bord=4;
 seitenwand=5;
 animation=6;
 
-Schrank(modus=0 );
+Schrank(modus=teile );
 module Schrank(
             breite=100,
             hoehe=350,
@@ -61,7 +61,9 @@ module Schrank(
     innentiefe = tiefe-($thickness+rueckrand+vorderrand);
     wandtiefe = tiefe-vorderrand;
        tiefe=breite;
-drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
+    drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
+    tuerhoehe=innenhoehe-platz;
+    tuerbreite=innenbreite+gelenk;
     
     brettpositionen=aufteiler(); //die höhen der bretter gemessen am innenboden 
     echo(brettpositionen);
@@ -151,10 +153,14 @@ drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
     }
     module tuer()
     {
-        translate([0,-0.5*gelenk])
+        difference()
         {
-            translate([$thickness,0])square([innenhoehe-platz,innenbreite+gelenk]);
-            square([hoehe,gelenk]);
+            translate([0,-0.5*gelenk])
+            {
+                translate([$thickness,0])square([tuerhoehe,innenbreite+gelenk]);
+                square([hoehe,gelenk]);
+            }
+          for(k=[2*$thickness,tuerhoehe-$thickness])# translate([k,-0.5*gelenk]) schiene_tuer();
         }
     }
     module fuehrung()
@@ -165,6 +171,15 @@ drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
             translate([-gelenkradius,-gelenkradius])square(gelenkradius);
         }
         translate([-innenbreite,0])square([innenbreite,$thickness+platz]);
+        translate([0,-gelenk])square([$thickness,gelenk]);
+    }
+    module schiene()
+    {
+        difference()
+        {
+            square([3*$thickness,tuerbreite]);
+             translate([$thickness,0]) schiene_tuer();
+        }
     }
     
     // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. 
@@ -194,6 +209,10 @@ drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
     {
         rotate(-90) verzahnung(tiefe, z);
     } 
+    module schiene_tuer()
+    {
+       schichtlinie(tuerbreite);
+    }
        
     
     // Das folgende Code frakment wird eigendlich nicht mehr gebraucht, da sein ergebnis als spezialfall des Moduls animation() erzeugt werden kann. Zu anschauungszwecken lasse ich es aber ersteinmal da. Es diente das vertige objekt zu sehen. Dieses sollte immer eines der ersten Dinge sein, die man schreibt wenn. Man Schnittmuster für ein objekt macht.
@@ -246,6 +265,10 @@ drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
                 [hoehe+DELTA, innenbreite+2*($thickness+tiefe+DELTA)]])
             translate(v)
                 rotate(-90) deckel();
+        translate (  [0, innenbreite+2*($thickness+tiefe+DELTA)+0.5*gelenk+DELTA]) tuer();
+        for(k=[hoehe+DELTA,hoehe+3*$thickness+2*DELTA]) translate (  [k, innenbreite+2*($thickness+tiefe+DELTA)+DELTA]) schiene();
+            
+      for(y=[0:2*$thickness:tuerbreite-$thickness])  translate([hoehe+6*DELTA+6*$thickness, innenbreite+2*($thickness+tiefe+DELTA+DELTA)+y])    fixierer(2);
     }
     
     // Das Modul animation() erzeugt eine animierte Bauanleitung. Wobei animation($t=1) das vertige Modell zeigt.
@@ -270,7 +293,11 @@ drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
             
              translate(drehpunkt)
                // rotate(-90*$t)
-                    translate([$thickness,0,0]) rotate(-90,[0,1,0])  linear_extrude($thickness)tuer();
+                    translate([$thickness,0,0]) rotate(-90,[0,1,0]) 
+               {
+                 # linear_extrude($thickness)tuer();
+                 for(x=[$thickness,tuerhoehe-2*$thickness])  translate([x,-0.5*gelenk,-$thickness]) linear_extrude($thickness)schiene();
+               }
         
 
                 for (v = [[0, 0, 0], [0, 0, hoehe-$thickness]])
@@ -283,6 +310,13 @@ drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
     }
 }
 
+module schichtlinie(l)
+{
+    d=4*$thickness;
+    for(k=[d:d:l-d]) translate([0,k]) square($thickness+$spiel);
+}
 
-
-
+module fixierer(n)
+{
+    square([n*$thickness,$thickness]);
+}
