@@ -7,23 +7,7 @@ include <lib.scad>;
 
 
 
-//Das Modul regal Baut ein einfaches Regal nach festgelegbaren Außenmaßen her. Es stellt sowohl eine Ansicht des vertigen Regals zur verfügung als auch Schnittmuster für alle Bauteile. Als auch eine Anleitung zum zusammenbau.
-//Es sind 6 Modies zur auswahl:
-//assemble gibt die ansicht des vertig zusammengebauten Regals aus.
-//teile gibt ein schnittmuster aus, das alle EinzelTeile des Regals enthällt.
-//rueckwand, deckel, bord und seitenwand geben jeweils ein Schnittmuster des entsprechenden Teils aus, wobei daran zu denken ist, dass für das fertige Regal von deckel und Seitenwänden jeweils 2 und von bord eines weniger als man fächer hat benötigt werden
-//animation gibt eine animierte Bauanleitung des Zusammenbaus aus. Denke daran, im menuepunkt view animate auszuwählen steps mindestens 10 und FPS etwa 1/10 der steps sind gute Einstellungen um für diese animation
-//regal hat 5 EingabeWerte der reihenfolge nach:
-// tiefe, breite, hoehe stellen jeweils die entsprechenden Außenmaße da.
 
-//Offene Diskussion: ist die Reihenfolg "tiefe, breite, hoehe" intuitiv? Die im Handwerk übliche reihenfolge "breit, hoehe, tiefe" ist offenkundig Kacke. Die Reheinfolge muss der Coordinatenreihenfolge der Achsen folgen "x,y,z" und die z-Achse bleibt zu kompatibilitätszwecken der hoehe zugeordnet. Wie herrum breite und tiefe der x, und y Achse zugeordnet werden kann diskutiert werden. Das Rational für die gewählte Reihenfolge ist, dass "Länge, Breite, Höhe" eine übliche Reihenfolge ist. hier steht die Breite an zweiter stelle, somit bleibt für die Tiefe nur noch der erste Platz. Sie ist sozusagten ein Synnonym für Länge
-
-
-// die Variable faecher ....
-// Der modus gibt den oben angegebenen Modus an
-// Der Rand gibt an, wie weit Deckel und Boden überstehen
-// Das Modul Regal  Greift auf das Modul verzahnung zurück und ist daher von den Modulenh verzahnung, stollen so wie zapfen abhängig. 
-//Die besonderen Variablen $thickness und $spiel beeinflussen es. Man sehe also zu, dass diese gesetzt sind
 
 
 
@@ -58,25 +42,26 @@ module Schrank(
     if(modus==7) tuer();  
         
     
-   tiefe=breite;
-   gelenkradius= norm([0.5*gelenk,$thickness])+platz; 
+
    DELTA = 0.001; 
         //DELTA Produziert einen minimalen Abstand zwischen dein Teilen, damit hier überhaupt ein Schnitt stattfindet dieses findet im Modul teile() statt.
     
 
-   
-   //zwar sind in diesem Design der Rand an der Rückseite und an den seiten links und rechts als gleichgroß gesetzt. Ein zukünftiges anderes design könnte hier aber durchaus einen anderen Weg gehen.
+          tiefe=breite;
+   gelenkradius= norm([0.5*gelenk,$thickness])+platz; 
+    
     
     rueckrand = rand;
     seitenrand = gelenkradius +rand;
-    vorderrand=seitenrand;
+    vorderrand=seitenrand+5;
     
     //hier werden ein paar maße ausrechnen, die wir später noch brauchen.
     innenhoehe = hoehe-2*$thickness;
     innenbreite = breite-2*($thickness+seitenrand);
     innentiefe = tiefe-($thickness+rueckrand+vorderrand);
     wandtiefe = tiefe-vorderrand;
-    
+       tiefe=breite;
+drehpunkt= [wandtiefe,seitenrand-0.5*rand] ;
     
     brettpositionen=aufteiler(); //die höhen der bretter gemessen am innenboden 
     echo(brettpositionen);
@@ -92,7 +77,7 @@ module Schrank(
             [for(k=[1:x-1]) k*(zwischenraum+$thickness)-$thickness]
          );
 
-    // nun einige Fehlermeldungen, um schlechte übergabewerte für das Regal abzufangen
+    // nun einige Fehlermeldungen, um schlechte übergabewerte für das Schrank abzufangen
     if(!(innenhoehe>0&&innenbreite>0&&innentiefe>0)) echo("<font color='red'>  schlechte eingabewerte in regal()</font>");   
    //hier für die Brettpositionen
     for (k=[1:brettanzahl-1])
@@ -144,7 +129,7 @@ module Schrank(
             for (k = [$thickness+seitenrand, breite-seitenrand])
                 translate([0, k]) deckel_seitenwand(false);
            // translate([wandtiefe,breite-seitenrand+0.5*rand])fuehrung();
-               translate([wandtiefe,seitenrand-0.5*rand]) mirror([0,1]) fuehrung();
+               translate(drehpunkt) mirror([0,1]) fuehrung();
 
         }
     }
@@ -283,7 +268,7 @@ module Schrank(
                         rotate([90,0,0])
                             linear_extrude($thickness) seitenwand();
             
-             translate([wandtiefe,seitenrand-0.5*rand,0])
+             translate(drehpunkt)
                // rotate(-90*$t)
                     translate([$thickness,0,0]) rotate(-90,[0,1,0])  linear_extrude($thickness)tuer();
         
