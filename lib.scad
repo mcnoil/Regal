@@ -1,7 +1,7 @@
 // Das Modul verzahnugn() macht die form, für eine Reihe von Zähnen (true) beziehungsweise Löcher (false) für dies Zähne. Die laenge gibt an, über welche Strecke verzahnt werden soll, wobei darauf geachtet ist, dass dafor und dahinter genügend Platz bleibt. z gibt an, ob die form für den Zapfen oder für den Stollen gemacht werden soll. Und die zahnlaenge, wie  groß die Zähne werden.
 // Es benutzt die Module Zapfen (Zähne) und Stollen (Löcher). Ausserdem hängt es von den Besonderen Variablen $thickness und $spiel ab.
-//$thickness= 3;
-//$spiel=0;
+$thickness= 3;
+$spiel=0;
 module verzahnung(laenge, z = true,zahnlaenge=10)
 {
    
@@ -63,22 +63,32 @@ module querriegelzapfen(zahnlaenge=10)
     {
         square([3*$thickness+wurzel, 3*zahnlaenge - $spiel]);
 
-        translate([0,zahnlaenge])square([2*$thickness+wurzel, zahnlaenge + $spiel]);
+        translate([$thickness,zahnlaenge]) stollen(zahnlaenge);
     }
 }
+//querriegelzapfen(zahnlaenge=20);
 module querriegelstollen(zahnlaenge=10)
 {
     stollen(3*zahnlaenge);
 }
 
-
-module querriegel(zahnlaenge=10,rand=$thickness)
+//querriegel(200);
+module querriegel(laenge=30,zahnlaenge=10,rand=$thickness)
 {
-    translate([-rand,0])square([rand,3*zahnlaenge]);
-    translate([0,zahnlaenge]) square([$thickness+rand,zahnlaenge]);
+    translate([-rand,0])square([rand,laenge]);
+    querriegelpositionen(laenge,zahnlaenge) translate([0,zahnlaenge])square([$thickness+rand,zahnlaenge]);
     
 }
 module verquerriegelung(laenge, z = true,zahnlaenge=10)
+{
+    querriegelpositionen(laenge,zahnlaenge)
+		{ 
+                if (z)  querriegelzapfen(zahnlaenge);
+                else  querriegelstollen(zahnlaenge);
+         }
+ }
+     
+module querriegelpositionen(laenge,zahnlaenge=10)
 {
    
     positionen=[for (k = [3*zahnlaenge : 6*zahnlaenge : laenge-2*zahnlaenge])k];
@@ -89,13 +99,9 @@ module verquerriegelung(laenge, z = true,zahnlaenge=10)
     translate([0,(rest-3*zahnlaenge)/2])
     {
         for (k = positionen)
-        {
-               translate([0,k]) 
-		{ 
-                if (z)  querriegelzapfen(zahnlaenge=10);
-                else  querriegelstollen(zahnlaenge);
-                }
-         }
+        
+               translate([0,k]) children();
+
      }
 }
 

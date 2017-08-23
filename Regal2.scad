@@ -158,7 +158,7 @@ hoehe=ghoehe-4*$thickness;
     }
     module stecker()
 	{
-		translate([rand,0])querriegel(rand=rand);
+		translate([rand,0])querriegel(laenge=tiefe,rand=rand);
 	}
     // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. 
    //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
@@ -239,7 +239,8 @@ hoehe=ghoehe-4*$thickness;
                 [ghoehe+DELTA, innenbreite+2*($thickness+tiefe+DELTA)]])
             translate(v)
                 rotate(-90) deckel();
-	for(k=[0:30+DELTA:2*tiefe-30])translate([ghoehe+breite+2*DELTA, innenbreite+2*$thickness+DELTA+k]) stecker();
+
+	for (y=[0,tiefe+DELTA],x=[0,2*rand+$thickness+DELTA]) translate([ghoehe+breite+2*DELTA+x, innenbreite+2*$thickness+DELTA+y]) stecker();
     }
     
     // Das Modul animation() erzeugt eine animierte Bauanleitung. Wobei animation($t=1) das vertige Modell zeigt.
