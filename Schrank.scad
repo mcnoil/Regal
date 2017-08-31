@@ -15,7 +15,7 @@ include<modiedef.scad>
 
 
 
-Schrank(modus=teile );
+Schrank(modus=animation );
 module Schrank(
             breite=100,
             hoehe=350,
@@ -33,7 +33,7 @@ module Schrank(
     if(modus==[1,1]) deckel();
     if(modus==[1,2]) bord();
     if(modus==[1,3]) seitenwand();
-    if(modus==6) animation();
+    if(modus==2) animation();
     if(modus==[1,5]) tuer();  
         
     
@@ -287,7 +287,7 @@ module Schrank(
                             linear_extrude($thickness) seitenwand();
             
              translate(drehpunkt)
-               // rotate(-90*$t)
+            //    rotate(-90*$t)
                     translate([$thickness,0,0]) rotate(-90,[0,1,0]) 
                {
                   linear_extrude($thickness)tuer();
