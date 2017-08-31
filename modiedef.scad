@@ -5,4 +5,5 @@ deckel=[1,1];
 bord=[1,2];
 seitenwand=[1,3];
 stecker=[1,4];
+tuer=[1,5];
 animation=2;
