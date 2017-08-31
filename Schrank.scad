@@ -2,6 +2,7 @@ $thickness=3;
 $spiel=0;  //wie sehr solls Wackeln
 
 include <lib.scad>;
+include<modiedef.scad>
 
 
 
@@ -12,13 +13,7 @@ include <lib.scad>;
 
 
 
-assemble=0;
-teile=1;
-rueckwand=2;
-deckel=3;
-bord=4;
-seitenwand=5;
-animation=6;
+
 
 Schrank(modus=teile );
 module Schrank(
@@ -28,18 +23,18 @@ module Schrank(
             modus=0,
             rand=3,
             gelenk=10,
-            platz=0.1,
+            platz=0.1
             )
 {
     //hier wird der Modus ausgeführt. die entsprechenden Module stehen weiter unten.
     if(modus==0) animation($t=1);
     if(modus==1) teile();
-    if(modus==2) rueckwand();
-    if(modus==3) deckel();
-    if(modus==4) bord();
-    if(modus==5) seitenwand();
+    if(modus==[1,0]) rueckwand();
+    if(modus==[1,1]) deckel();
+    if(modus==[1,2]) bord();
+    if(modus==[1,3]) seitenwand();
     if(modus==6) animation();
-    if(modus==7) tuer();  
+    if(modus==[1,5]) tuer();  
         
     
 
@@ -160,7 +155,7 @@ module Schrank(
                 translate([$thickness,0])square([tuerhoehe,innenbreite+gelenk]);
                 square([hoehe,gelenk]);
             }
-          for(k=[2*$thickness,tuerhoehe-$thickness])# translate([k,-0.5*gelenk]) schiene_tuer();
+          for(k=[2*$thickness,tuerhoehe-$thickness]) translate([k,-0.5*gelenk]) schiene_tuer();
         }
     }
     module fuehrung()
@@ -295,7 +290,7 @@ module Schrank(
                // rotate(-90*$t)
                     translate([$thickness,0,0]) rotate(-90,[0,1,0]) 
                {
-                 # linear_extrude($thickness)tuer();
+                  linear_extrude($thickness)tuer();
                  for(x=[$thickness,tuerhoehe-2*$thickness])  translate([x,-0.5*gelenk,-$thickness]) linear_extrude($thickness)schiene();
                }
         

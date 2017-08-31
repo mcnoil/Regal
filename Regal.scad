@@ -28,14 +28,6 @@ include <lib.scad>;
 
 
 
-assemble=0;
-teile=1;
-rueckwand=2;
-deckel=3;
-bord=4;
-seitenwand=5;
-animation=6;
-
 
 module regal(
             tiefe=100,
@@ -43,16 +35,16 @@ module regal(
             hoehe=350,
             faecher=5,
             modus=0,
-            rand=5,
+            rand=5
             )
 {
     //hier wird der Modus ausgeführt. die entsprechenden Module stehen weiter unten.
     if(modus==0) animation($t=1);
     if(modus==1) teile();
-    if(modus==2) rueckwand();
-    if(modus==3) deckel();
-    if(modus==4) bord();
-    if(modus==5) seitenwand();
+    if(modus==[1,0]) rueckwand();
+    if(modus==[1,1]) deckel();
+    if(modus==[1,2]) bord();
+    if(modus==[1,3]) seitenwand();
     if(modus==6) animation();
 
    DELTA = 0.001; 
