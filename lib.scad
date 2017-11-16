@@ -112,3 +112,36 @@ module aufbau()
     for(n=[0:$children-1])if($t*$children>=n)children(n);
 }
 
+verschluss();
+module verschluss (z=true)
+{
+                wurzel=0.1;  
+
+    if(z)
+        {
+            translate([-wurzel,0]) square([2*$thickness+wurzel, 10]);
+            translate([-wurzel,-5+0.5*$spiel]) square([$thickness+wurzel, 20]);
+
+            
+            translate([2*$thickness, -5+0.5*$spiel]) square([5,20-$spiel]);
+            
+    }
+    else
+    {
+            translate([-0.5*$spiel, -5]) square([$thickness+$spiel, 20]);
+    }
+
+
+}
+
+module scheibe()
+{
+    difference()
+    {
+        circle(15);
+        circle(norm([5,$thickness/2])+$spiel);
+        square([$thickness+$spiel,20],center=true);
+        
+    }
+}
+
