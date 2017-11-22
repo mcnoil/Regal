@@ -112,35 +112,35 @@ module aufbau()
     for(n=[0:$children-1])if($t*$children>=n)children(n);
 }
 
-verschluss();
-module verschluss (z=true)
+
+module verschluss (z=true, zahnlaenge=10)
 {
                 wurzel=0.1;  
 
     if(z)
         {
-            translate([-wurzel,0]) square([2*$thickness+wurzel, 10]);
-            translate([-wurzel,-5+0.5*$spiel]) square([$thickness+wurzel, 20]);
+            translate([-wurzel,0]) square([2*$thickness+wurzel, zahnlaenge]);
+            translate([-wurzel,-0.5*zahnlaenge +0.5*$spiel]) square([$thickness+wurzel, 2*zahnlaenge]);
 
             
-            translate([2*$thickness, -5+0.5*$spiel]) square([5,20-$spiel]);
+            translate([2*$thickness, -0.5*zahnlaenge +0.5*$spiel]) square([5,2*zahnlaenge-$spiel]);
             
     }
     else
     {
-            translate([-0.5*$spiel, -5]) square([$thickness+$spiel, 20]);
+            translate([-0.5*$spiel, -0.5*zahnlaenge]) square([$thickness+$spiel, 2*zahnlaenge]);
     }
 
 
 }
 
-module scheibe()
+module scheibe(zahnlaenge=10)
 {
     difference()
     {
-        circle(15);
-        circle(norm([5,$thickness/2])+$spiel);
-        square([$thickness+$spiel,20],center=true);
+        circle(1.5*zahnlaenge);
+        circle(norm([0.5*zahnlaenge,$thickness/2])+$spiel);
+        square([$thickness+$spiel,2*zahnlaenge],center=true);
         
     }
 }
