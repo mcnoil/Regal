@@ -112,8 +112,7 @@ module aufbau()
     for(n=[0:$children-1])if($t*$children>=n)children(n);
 }
 
-
-module verschluss (z=true, zahnlaenge=10)
+module verschluss (z=true, zahnlaenge=10,riegel=$thickness)
 {
                 wurzel=0.1;  
 
@@ -123,7 +122,7 @@ module verschluss (z=true, zahnlaenge=10)
             translate([-wurzel,-0.5*zahnlaenge +0.5*$spiel]) square([$thickness+wurzel, 2*zahnlaenge]);
 
             
-            translate([2*$thickness, -0.5*zahnlaenge +0.5*$spiel]) square([5,2*zahnlaenge-$spiel]);
+            translate([2*$thickness, -0.5*zahnlaenge +0.5*$spiel]) square([riegel,2*zahnlaenge-$spiel]);
             
     }
     else
