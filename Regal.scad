@@ -35,6 +35,10 @@ bord=4;
 seitenwand=5;
 animation=6;
 
+maennlich=1;
+weiblich=0;
+
+
 
 module regal(
             tiefe=100,
@@ -98,14 +102,14 @@ module regal(
  
   
     
-    // Im folgenden werden die einzelteile als 2d formen definiert diese sind im wesentlichen Rechtecke (sqare(vektor)) zu denen Zähne hinzukommen bezihungsweise von denen Löcher abgezogen werden um verbindungen mit benachbarten Brettern herzustellen.  xx_xxx(); stellt dabei jeweils die verbindung zwischen den entsprechenden Modulen da, wobei die eingabe true die Form aufruft, die hinzuzufügen ist und die Eingabe false die entsprechende gegen Form.
+    // Im folgenden werden die einzelteile als 2d formen definiert diese sind im wesentlichen Rechtecke (sqare(vektor)) zu denen Zähne hinzukommen beziehungsweise von denen Löcher abgezogen werden um verbindungen mit benachbarten Brettern herzustellen.  xx_xxx(); stellt dabei jeweils die verbindung zwischen den entsprechenden Modulen da, wobei die eingabe maennlich die Form aufruft, die hinzuzufügen ist und die Eingabe weiblich die entsprechende gegen Form.
     
     module bord()
     {
             square([innentiefe, innenbreite]); //hauptteil
-            mirror() bord_rueckwand(true);
-                    bord_seitenwand(true);
-           translate( [0, innenbreite]) mirror([0,1]) bord_seitenwand(true);
+            mirror() bord_rueckwand(maennlich);
+                    bord_seitenwand(maennlich);
+           translate( [0, innenbreite]) mirror([0,1]) bord_seitenwand(maennlich);
         
     }
     
@@ -117,10 +121,10 @@ module regal(
         {
             square([innenhoehe, innenbreite]);  //hauptteil
             for (k = brettpositionen)
-                translate([k, 0]) bord_rueckwand(false);
+                translate([k, 0]) bord_rueckwand(weiblich);
         }
-        mirror() deckel_rueckwand(true);
-        translate( [innenhoehe, 0]) deckel_rueckwand(true);
+        mirror() deckel_rueckwand(maennlich);
+        translate( [innenhoehe, 0]) deckel_rueckwand(maennlich);
         rotate(-90) seitenwand_rueckwand();
         translate([0, innenbreite])
                 rotate(-90) mirror() seitenwand_rueckwand();
@@ -134,9 +138,9 @@ module regal(
         difference()
         {
             square([tiefe, breite]);	//hauptteil
-            translate([rueckrand, $thickness+seitenrand]) deckel_rueckwand(false);
+            translate([rueckrand, $thickness+seitenrand]) deckel_rueckwand(maennlich);
             for (k = [$thickness+seitenrand, breite-seitenrand])
-                translate([0, k, 0]) deckel_seitenwand(false);
+                translate([0, k, 0]) deckel_seitenwand(maennlich);
         }
     }
     
@@ -149,39 +153,39 @@ module regal(
             square([tiefe, innenhoehe]);	//hauptteil
             for (v = brettpositionen)
                 translate([$thickness+rueckrand, v+$thickness]) 
-                    bord_seitenwand(false);
-            translate([rueckrand,0,0]) seitenwand_rueckwand(false);
+                    bord_seitenwand(weiblich);
+            translate([rueckrand,0,0]) seitenwand_rueckwand(weiblich);
         }
-        deckel_seitenwand(true);
-        translate([ 0,innenhoehe]) mirror([0,1]) deckel_seitenwand(true);
+        deckel_seitenwand(maennlich);
+        translate([ 0,innenhoehe]) mirror([0,1]) deckel_seitenwand(maennlich);
     }
     
     // hier folgt eine Liste der jeweiligen Verbindungen zwischen den Modulen. zwar wird hier zeweils nur die verbindung verzahnung() verwendete andere sind jedoch möglich. 
    //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
   //Sollten z.B. zu einem späteren Zeitpunkt weitere Konektoren hinzu kommen, so kann ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
     
-    module seitenwand_rueckwand(z = true)
+    module seitenwand_rueckwand(geschlecht= maennlich)
     {
-        verzahnung(innenhoehe, z);
+        verzahnung(innenhoehe, geschlecht);
     }
      
-    module bord_rueckwand(z = true)
+    module bord_rueckwand(geschlecht= maennlich)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
     
-    module deckel_rueckwand(z = true)
+    module deckel_rueckwand(geschlecht= maennlich)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
-    module bord_seitenwand(z = true)
+    module bord_seitenwand(geschlecht= maennlich)
     {
-        rotate(-90) verzahnung(innentiefe,z);
+        rotate(-90) verzahnung(innentiefe,geschlecht);
     }
     
-    module deckel_seitenwand(z = true)
+    module deckel_seitenwand(geschlecht= maennlich)
     {
-        rotate(-90) verzahnung(tiefe, z);
+        rotate(-90) verzahnung(tiefe, geschlecht);
     } 
        
     
@@ -269,10 +273,10 @@ module regal(
 }
 
 
-// Das Modul verzahnugn() macht die form, für eine Reihe von Zähnen (true) beziehungsweise Löcher (false) für dies Zähne. Die laenge gibt an, über welche Strecke verzahnt werden soll, wobei darauf geachtet ist, dass dafor und dahinter genügend Platz bleibt. z gibt an, ob die form für den Zapfen oder für den Stollen gemacht werden soll. Und die zahnlaenge, wie  groß die Zähne werden.
+// Das Modul verzahnugn() macht die form, für eine Reihe von Zähnen (maennlich) beziehungsweise Löcher (weiblich) für dies Zähne. Die laenge gibt an, über welche Strecke verzahnt werden soll, wobei darauf geachtet ist, dass dafor und dahinter genügend Platz bleibt. z gibt an, ob die form für den Zapfen oder für den Stollen gemacht werden soll. Und die zahnlaenge, wie  groß die Zähne werden.
 // Es benutzt die Module Zapfen (Zähne) und Stollen (Löcher). Ausserdem hängt es von den Besonderen Variablen $thickness und $spiel ab.
 
-module verzahnung(laenge, z = true,zahnlaenge=10)
+module verzahnung(laenge, geschlecht = 1 ,zahnlaenge=10)
 {
    
     positionen=[for (k = [zahnlaenge : 2*zahnlaenge : laenge-2*zahnlaenge])k];
@@ -286,7 +290,7 @@ module verzahnung(laenge, z = true,zahnlaenge=10)
         {
                translate([0,k]) 
 		{ 
-                if (z) zapfen(zahnlaenge);
+                if (geschlecht==1) zapfen(zahnlaenge);
                 else stollen (zahnlaenge);
                 }
          }
