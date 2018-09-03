@@ -183,10 +183,10 @@ module Setzkasten(
                 square([innentiefe,innenhoehe]);
                 deckel_querbrett();
                 translate([0,innenhoehe])mirror([0,1])deckel_querbrett(true);
-                 mirror()querbrett_rueckwand(z = true);
+                 mirror()querbrett_rueckwand(geschlecht = true);
             }
             for(k=brettpositionen)
-            translate([0,k]) querbrett_bord(z=true);
+            translate([0,k]) querbrett_bord(geschlecht=true);
         }
 	}
     
@@ -194,41 +194,41 @@ module Setzkasten(
    //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
   //Sollten z.B. zu einem späteren Zeitpunkt weitere Konektoren hinzu kommen, so kann ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
     
-    module seitenwand_rueckwand(z = true)
+    module seitenwand_rueckwand(geschlecht = true)
     {
-        verzahnung(innenhoehe, z);
+        verzahnung(innenhoehe, geschlecht);
     }
      
-    module bord_rueckwand(z = true)
+    module bord_rueckwand(geschlecht = true)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
     
-    module deckel_rueckwand(z = true)
+    module deckel_rueckwand(geschlecht = true)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
-    module bord_seitenwand(z = true)
+    module bord_seitenwand(geschlecht = true)
     {
-        rotate(-90) verzahnung(innentiefe,z);
+        rotate(-90) verzahnung(innentiefe,geschlecht);
     }
     
-    module deckel_seitenwand(z = true)
+    module deckel_seitenwand(geschlecht = true)
     {
-        rotate(-90) verzahnung(tiefe, z);
+        rotate(-90) verzahnung(tiefe, geschlecht);
     } 
     
-	module deckel_querbrett(z=true)
+	module deckel_querbrett(geschlecht=true)
 	{
-		rotate(-90) verzahnung(innentiefe,z);
+		rotate(-90) verzahnung(innentiefe,geschlecht);
 	}   
-   module querbrett_rueckwand(z = true)
+   module querbrett_rueckwand(geschlecht = true)
     {
-        verzahnung(innenhoehe, z);
+        verzahnung(innenhoehe, geschlecht);
     }
-    module querbrett_bord(z=true)
+    module querbrett_bord(geschlecht=true)
     {
-        translate([-($thickness+rand),0])steckung(tiefe,z);
+        translate([-($thickness+rand),0])steckung(tiefe,geschlecht);
     }
     
 //die funktion puzzler liefert eine Liste für die aufteilung der borde auf der arbeitsfläche.

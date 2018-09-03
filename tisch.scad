@@ -50,21 +50,21 @@ module ybein()
 
 }
 
-module x_y(z=true)
+module x_y(geschlecht=true)
 {
-    steckung(tischhoehe-$thickness,z);
+    steckung(tischhoehe-$thickness,geschlecht);
     
 }
 //platte_x();
 
-module platte_x(z)
+module platte_x(geschlecht)
 {
-        for(k=[0,radius-rand]) translate([0,k])verzahnung((radius-rand),z,zahn );
+        for(k=[0,radius-rand]) translate([0,k])verzahnung((radius-rand),geschlecht,zahn );
 
 }
 
-module platte_y(z)
+module platte_y(geschlecht)
 {
-        verzahnung(2*(radius-rand),z,zahn );
+        verzahnung(2*(radius-rand),geschlecht,zahn );
 
 }

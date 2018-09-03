@@ -181,28 +181,28 @@ module Schrank(
    //Man könnte sich nun Fragen, warum ich aus jedem der aufruf der verzahnung() ein eigenes Modul gemacht hab. es geht natürlich darum semantic und content zu trennen.
   //Sollten z.B. zu einem späteren Zeitpunkt weitere Konektoren hinzu kommen, so kann ein entsprechender fork dieses projektes diese in die zugehörigen module einschreiben und sie werden ihren Weg an die richtige Stelle in den jeweiligen Brettern finden.
     
-    module seitenwand_rueckwand(z = true)
+    module seitenwand_rueckwand(geschlecht = true)
     {
-        verzahnung(innenhoehe, z);
+        verzahnung(innenhoehe, geschlecht);
     }
      
-    module bord_rueckwand(z = true)
+    module bord_rueckwand(geschlecht = true)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
     
-    module deckel_rueckwand(z = true)
+    module deckel_rueckwand(geschlecht = true)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
-    module bord_seitenwand(z = true)
+    module bord_seitenwand(geschlecht = true)
     {
-        rotate(-90) verzahnung(innentiefe,z);
+        rotate(-90) verzahnung(innentiefe,geschlecht);
     }
     
-    module deckel_seitenwand(z = true)
+    module deckel_seitenwand(geschlecht = true)
     {
-        rotate(-90) verzahnung(tiefe, z);
+        rotate(-90) verzahnung(tiefe, geschlecht);
     } 
     module schiene_tuer()
     {

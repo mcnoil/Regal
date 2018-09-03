@@ -7,3 +7,6 @@ seitenwand=[1,3];
 stecker=[1,4];
 tuer=[1,5];
 animation=2;
+
+maennlich=true;
+weiblich=false;

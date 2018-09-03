@@ -153,26 +153,26 @@ module regal(
     
     module seitenwand_rueckwand(z = true)
     {
-        verzahnung(innenhoehe, z);
+        verzahnung(innenhoehe, geschlecht);
     }
      
-    module bord_rueckwand(z = true)
+    module bord_rueckwand(geschlecht = true)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
     
-    module deckel_rueckwand(z = true)
+    module deckel_rueckwand(geschlecht = true)
     {
-        verzahnung(innenbreite, z);
+        verzahnung(innenbreite, geschlecht);
     }
-    module bord_seitenwand(z = true)
+    module bord_seitenwand(geschlecht = true)
     {
-        rotate(-90) verzahnung(innentiefe,z);
+        rotate(-90) verzahnung(innentiefe,geschlecht);
     }
     
-    module deckel_seitenwand(z = true)
+    module deckel_seitenwand(geschlecht = true)
     {
-        rotate(-90) verzahnung(tiefe, z);
+        rotate(-90) verzahnung(tiefe, geschlecht);
     } 
        
     

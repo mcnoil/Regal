@@ -11,8 +11,8 @@ halter=10;
  module traeger()
  {
      dreieck(dachbreite,dachhoehe);
-     translate([0,dachhoehe])rotate(90+dachwinkel) traeger_dachplatte(z=true);
-      mirror()    translate([0,dachhoehe])rotate(90+dachwinkel) traeger_dachplatte(z=true);
+     translate([0,dachhoehe])rotate(90+dachwinkel) traeger_dachplatte(geschlecht=true);
+      mirror()    translate([0,dachhoehe])rotate(90+dachwinkel) traeger_dachplatte(geschlecht=true);
 
  }
  //traeger();
@@ -41,9 +41,9 @@ halter=10;
     mirror()translate([0,-rand,dachhoehe]) rotate(dachwinkel,[0,1,0])linear_extrude($thickness) dachplatte();
  }
  
- module traeger_dachplatte(z=true)
+ module traeger_dachplatte(geschlecht=true)
  {
-     verzahnung(deckbreite,z,halter);
+     verzahnung(deckbreite,geschlecht,halter);
  }
  
  
@@ -85,6 +85,6 @@ halter=10;
        
  
 //dachplatte();
-// traeger_dachplatte(z=true);
+// traeger_dachplatte(geschlecht=true);
 //         rotate(-90) traeger_dachplatte(false);
 //traeger();

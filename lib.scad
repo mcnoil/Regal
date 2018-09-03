@@ -1,8 +1,8 @@
-// Das Modul verzahnugn() macht die form, für eine Reihe von Zähnen (true) beziehungsweise Löcher (false) für dies Zähne. Die laenge gibt an, über welche Strecke verzahnt werden soll, wobei darauf geachtet ist, dass dafor und dahinter genügend Platz bleibt. z gibt an, ob die form für den Zapfen oder für den Stollen gemacht werden soll. Und die zahnlaenge, wie  groß die Zähne werden.
+// Das Modul verzahnugn() macht die form, für eine Reihe von Zähnen (maennlich) beziehungsweise Löcher (weiblich) für dies Zähne. Die laenge gibt an, über welche Strecke verzahnt werden soll, wobei darauf geachtet ist, dass dafor und dahinter genügend Platz bleibt. geschlecht gibt an, ob die form für den Zapfen oder für den Stollen gemacht werden soll. Und die zahnlaenge, wie  groß die Zähne werden.
 // Es benutzt die Module Zapfen (Zähne) und Stollen (Löcher). Ausserdem hängt es von den Besonderen Variablen $thickness und $spiel ab.
 $thickness= 3;
 $spiel=0;
-module verzahnung(laenge, z = true,zahnlaenge=10)
+module verzahnung(laenge, geschlecht = maennlich,zahnlaenge=10)
 {
    
     positionen=[for (k = [zahnlaenge : 2*zahnlaenge : laenge-2*zahnlaenge])k];
@@ -16,7 +16,7 @@ module verzahnung(laenge, z = true,zahnlaenge=10)
         {
                translate([0,k]) 
 		{ 
-                if (z) zapfen(zahnlaenge);
+                if (geschlecht) zapfen(zahnlaenge);
                 else stollen (zahnlaenge);
                 }
          }
@@ -39,18 +39,18 @@ module zapfen(zahnlaenge=10)
     translate([-wurzel, 0.5*$spiel]) square([$thickness+wurzel, zahnlaenge - $spiel]);
 }
 
- function tensor (z)
+ function tensor (input)
 	=(
-	z ? 1
+	input ? 1
 	:
-	!z ? 0
+	!input ? 0
     : false
 	);
 
- module steckung(laenge,z=true)
+ module steckung(laenge,geschlecht=maennlich)
 {
 	
-translate([laenge*tensor(z)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+$spiel]);
+translate([laenge*tensor(geschlecht)/2,-0.5*$spiel])square([laenge/2+$spiel/2,$thickness+$spiel]);
 
 }
 
@@ -61,7 +61,7 @@ module querriegelzapfen(zahnlaenge=10)
     //gibt an, wie weit sich der Zapfen mit seinem ursrpung überschneidet hierdurch wird verhindert, dass kleine rechenfehler dazu führen, dass er abgeschnitten wird.
     translate([-wurzel, 0.5*$spiel]) difference()
     {
-        square([3*$thickness+wurzel, 3*zahnlaenge - $spiel]);
+        square([3*$thickness+wurzel, 3*geschlechtahnlaenge - $spiel]);
 
         translate([$thickness,zahnlaenge]) stollen(zahnlaenge);
     }
@@ -79,11 +79,11 @@ module querriegel(laenge=30,zahnlaenge=10,rand=$thickness)
     querriegelpositionen(laenge,zahnlaenge) translate([0,zahnlaenge])square([$thickness+rand,zahnlaenge]);
     
 }
-module verquerriegelung(laenge, z = true,zahnlaenge=10)
+module verquerriegelung(laenge, geschlecht = maennlich,zahnlaenge=10)
 {
     querriegelpositionen(laenge,zahnlaenge)
 		{ 
-                if (z)  querriegelzapfen(zahnlaenge);
+                if (geschlecht)  querriegelzapfen(zahnlaenge);
                 else  querriegelstollen(zahnlaenge);
          }
  }
@@ -112,11 +112,11 @@ module aufbau()
     for(n=[0:$children-1])if($t*$children>=n)children(n);
 }
 
-module verschluss (z=true, zahnlaenge=10,riegel=$thickness)
+module verschluss (geschlecht=maennlich, zahnlaenge=10,riegel=$thickness)
 {
                 wurzel=0.1;  
 
-    if(z)
+    if(geschlecht)
         {
             translate([-wurzel,0]) square([2*$thickness+wurzel, zahnlaenge]);
             translate([-wurzel,-0.5*zahnlaenge +0.5*$spiel]) square([$thickness+wurzel, 2*zahnlaenge]);
@@ -139,7 +139,7 @@ module scheibe(zahnlaenge=10)
     {
         circle(1.5*zahnlaenge);
         circle(norm([0.5*zahnlaenge,$thickness/2])+$spiel);
-        square([$thickness+$spiel,2*zahnlaenge],center=true);
+        square([$thickness+$spiel,2*zahnlaenge],center=maennlich);
         
     }
 }
